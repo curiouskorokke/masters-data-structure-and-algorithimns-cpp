@@ -16,14 +16,18 @@ struct  Rectangle
 
 int main()
 {
-    struct Rectangle rect = {10,5};
-    rect.area = rect.length * rect.breadth;
+    // Structure to a pointer
+    struct Rectangle *p;
 
-    printf("Area: %d\n", rect.area);
+    // C++
+    // p = new Rectangle(sizeof(struct Rectangle));
 
+    // C
+    // p = (struct Rectangle *)malloc(sizeof(struct Rectangle));
 
-    // Structure can also be declared as an array.
-    struct Rectangle rectArr[2] = { {1,2}, {2,3}};
-
+    *p = {13,14};
+    cout<<"Length: "<<p->length<<endl;
+    cout<<"Breadth: "<<p->breadth<<endl;
+    
     return 0;
 }
