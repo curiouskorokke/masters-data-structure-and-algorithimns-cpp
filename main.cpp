@@ -1,33 +1,36 @@
 #include<iostream>
 using namespace std;
 
-/* Memory Section
- * Heap: |
- * Stack:| main(): length [2 bytes], breadth [2 bytes], area [2 bytes]
- * Code: | main()
- */
-
-struct  Rectangle
+template <class T>
+class Arithmetic
 {
-    int length;
-    int breadth;
-    int area;
+private:
+    T a;
+    T b;
+
+public:
+    Arithmetic(T a, T b)
+    {
+        this->a = a;
+        this->b = b;
+    }
+    T add()
+    {
+        return a + b;
+    }
+    T subtract()
+    {
+        return a - b;
+    }
 };
 
 int main()
 {
-    // Structure to a pointer
-    struct Rectangle *p;
+    Arithmetic a(1,2);
 
-    // C++
-    // p = new Rectangle(sizeof(struct Rectangle));
+    cout<<"Add: "<<a.add()<<endl;
+    cout<<"Subtract: "<<a.subtract()<<endl;
 
-    // C
-    // p = (struct Rectangle *)malloc(sizeof(struct Rectangle));
 
-    *p = {13,14};
-    cout<<"Length: "<<p->length<<endl;
-    cout<<"Breadth: "<<p->breadth<<endl;
-    
     return 0;
 }
