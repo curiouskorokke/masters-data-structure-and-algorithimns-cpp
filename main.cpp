@@ -13,12 +13,23 @@ struct Array
     int length;
 };
 
-void Display(Array arr)
+void Display(struct Array arr)
 {
     for (int i = 0; i < arr.length; i++)
     {
         cout << arr.A[i] << " ";
     }
+    cout << endl;
+}
+
+void Append(struct Array *arr, int value)
+{
+    if ((*arr).length < (*arr).size)
+    {
+        (*arr).A[(*arr).length] = value;
+    }
+
+    (*arr).length++;
 }
 
 int main()
@@ -40,5 +51,10 @@ int main()
         cin >> arr.A[i];
     }
 
+    cout << "----- Display -----" << endl;
+    Display(arr);
+
+    cout << "----- Append -----" << endl;
+    Append(&arr, 10);
     Display(arr);
 }
