@@ -67,6 +67,29 @@ void Insert(struct Array* arr, int value, int index)
     (*arr).length++;
 }
 
+int Delete(struct Array* arr, int index)
+{
+    int x = (*arr).A[index];
+    if (index < (*arr).length - 1 && index >= 0)
+    {
+        for (int i = index; i < (*arr).length; i++)
+        {
+            (*arr).A[i] = (*arr).A[i + 1];
+        }
+
+        (*arr).length--;
+        return x;
+
+    }
+    else
+    {
+        cout << "Invalid index." << endl;
+        return -1;
+    }
+
+
+}
+
 int main()
 {
     struct Array arr;
@@ -97,5 +120,7 @@ int main()
     Insert(&arr, 23, 0);
     Display(arr);
 
-
+    cout << "----- Delete at index: 3 -----" << endl;
+    cout<<Delete(&arr, 3)<<" is deleted."<<endl;
+    Display(arr);
 }
