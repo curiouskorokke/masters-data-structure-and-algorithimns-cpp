@@ -1,35 +1,49 @@
 #include<iostream>
+
 using namespace std;
-
-template <class T>
-class Arithmetic
-{
-private:
-    T a;
-    T b;
-
-public:
-    Arithmetic(T a, T b)
-    {
-        this->a = a;
-        this->b = b;
-    }
-    T add()
-    {
-        return a + b;
-    }
-    T subtract()
-    {
-        return a - b;
-    }
-};
 
 int main()
 {
-    Arithmetic a(1,2);
+    // Update size of array P
+    int* p;
+    p = new int[5];
+    int* q;
+    q = new int[10];
 
-    cout<<"Add: "<<a.add()<<endl;
-    cout<<"Subtract: "<<a.subtract()<<endl;
+
+    // Filling up array
+    for (int i = 0; i < 5; i++)
+    {
+        p[i] = i;
+    }
+
+    for (int i = 0; i < 10; i++)
+    {
+        q[i] = i + 10;
+    }
+
+    delete []p;
+    p = nullptr;
+    p = new int(10);
+
+    for (int i = 0; i < 10; i++)
+    {
+        p[i] = q[i];
+        cout<< p + i <<": "<< p[i]<<endl;
+    }
+
+    cout<<"----------"<<endl;
+
+    delete []q;
+    q = nullptr;
+
+    for (int i = 0; i < 10; i++)
+    {
+        cout <<p + i<<": " <<p[i] << endl;
+    }
+
+    delete []p;
+    p = nullptr;
 
 
     return 0;
