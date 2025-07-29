@@ -22,11 +22,46 @@ void Display(struct Array arr)
     cout << endl;
 }
 
-void Append(struct Array *arr, int value)
+
+void Append(struct Array* arr, int value)
 {
     if ((*arr).length < (*arr).size)
     {
         (*arr).A[(*arr).length] = value;
+        (*arr).length++;
+    }
+    else
+    {
+        cout << "Array size is at it's capacity." << endl;
+    }
+}
+
+
+void Insert(struct Array* arr, int value, int index)
+
+{
+    if (arr->length == arr->size)
+    {
+        cout << "Array size is at it's capacity." << endl;
+        return;
+    }
+
+    if (index > arr->length && index < 0)
+    {
+        cout << "Invalid index." << endl;
+        return;
+    }
+
+
+    for (int i = (*arr).length - 1; i >= 0; i--)
+    {
+        (*arr).A[i + 1] = (*arr).A[i];
+
+        if (i == index)
+        {
+            (*arr).A[index] = value;
+            break;
+        }
     }
 
     (*arr).length++;
@@ -54,7 +89,13 @@ int main()
     cout << "----- Display -----" << endl;
     Display(arr);
 
-    cout << "----- Append -----" << endl;
+    cout << "----- Append 10 -----" << endl;
     Append(&arr, 10);
     Display(arr);
+
+    cout << "----- Insert value: 23 at index: 3 -----" << endl;
+    Insert(&arr, 23, 0);
+    Display(arr);
+
+
 }
