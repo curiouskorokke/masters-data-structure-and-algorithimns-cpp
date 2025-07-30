@@ -13,6 +13,15 @@ struct Array
     int length;
 };
 
+void Swap(struct Array* arr, int targetIndex, int index)
+{
+    int temp;
+
+    temp = arr->A[targetIndex];
+    arr->A[targetIndex] = arr->A[index];
+    arr->A[index] = temp;
+}
+
 void Display(struct Array arr)
 {
     for (int i = 0; i < arr.length; i++) // O(n)
@@ -85,6 +94,25 @@ int Delete(struct Array* arr, int index)
     }
 } // Time Complexity: O(n + 4) = O(n)
 
+int LinearSearch(struct Array* arr, int value)
+{
+    for (int i = 0; i < arr->length; i++) // Worst: O(n), Best O(1)
+    {
+        if (arr->A[i] == value) // O(1)
+        {
+            cout << "Iteration taken to find value: " << i << endl;
+            // There are generally two ways to improve the next search
+            // 1. Transportation
+            // Swap(arr, i-1, i);
+            // 2. Move to Head
+            Swap(arr, 0, i);
+            return i;
+        }
+    }
+
+    return -1;
+} // Time complexity: O(n + 1) = O(n)
+
 int main()
 {
     struct Array arr;
@@ -117,5 +145,9 @@ int main()
 
     cout << "----- Delete at index: 3 -----" << endl;
     cout << Delete(&arr, 3) << " is deleted." << endl;
+    Display(arr);
+
+    cout << "----- Linear Search at index: 2 -----" << endl;
+    cout << "Found at index " << LinearSearch(&arr, 6) << endl;
     Display(arr);
 }
