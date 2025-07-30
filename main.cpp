@@ -100,7 +100,6 @@ int LinearSearch(struct Array* arr, int value)
     {
         if (arr->A[i] == value) // O(1)
         {
-            cout << "Iteration taken to find value: " << i << endl;
             // There are generally two ways to improve the next search
             // 1. Transportation
             // Swap(arr, i-1, i);
@@ -112,6 +111,41 @@ int LinearSearch(struct Array* arr, int value)
 
     return -1;
 } // Time complexity: O(n + 1) = O(n)
+
+/*
+ * Condition
+ * 1. Array must be sorted
+ */
+int BinarySearch(struct Array* arr, int value)
+{
+    int lowIndex, midIndex, highIndex;
+
+    lowIndex = 0;
+    highIndex = arr->length - 1;
+
+    while (lowIndex <= highIndex)
+    {
+        midIndex = (lowIndex + highIndex) / 2;
+
+        int mid = arr->A[midIndex];
+
+        if (mid == value)
+        {
+            return midIndex;
+        }
+
+        if (value < mid)
+        {
+            highIndex = midIndex - 1;
+        }
+        else
+        {
+            lowIndex = midIndex + 1;
+        }
+    }
+
+    return -1;
+}
 
 int main()
 {
@@ -147,7 +181,15 @@ int main()
     cout << Delete(&arr, 3) << " is deleted." << endl;
     Display(arr);
 
-    cout << "----- Linear Search at index: 2 -----" << endl;
-    cout << "Found at index " << LinearSearch(&arr, 6) << endl;
+    cout << "----- Linear Search of value: 2 -----" << endl;
+    cout << "Found at index " << LinearSearch(&arr, 2) << endl;
+    cout << "After moving found value to head: "<<endl;
     Display(arr);
+
+    cout << "----- Binary Search of value: 3 -----" << endl;
+    // Make sure to comment line 167 - 185
+    cout << "Found at index " << BinarySearch(&arr, 3) << endl;
+    Display(arr);
+
+
 }
