@@ -284,8 +284,51 @@ void SortNegativeToPositive(struct Array* arr)
         {
             Swap(arr, i, j);
         }
-
     }
+}
+
+/*
+ * Merge Sorted
+ * Condition:
+ * 1. Both arrays merging must be sorted.
+ */
+Array MergeSorted(struct Array* targetArray, struct Array addArray)
+{
+    int newArrayLength = targetArray->length + addArray.length;
+    int* arr = new int[newArrayLength];
+    int i = 0;
+    int j = 0;
+
+
+    while (i < targetArray->length && j < addArray.length )
+    {
+        if (targetArray->A[i] < addArray.A[j])
+        {
+            arr[i + j] = targetArray->A[i];
+            i++;
+        }
+        else
+        {
+            arr[i + j] = addArray.A[j];
+            j++;
+        }
+    }
+
+    while (i < targetArray->length)
+    {
+        arr[i + j] = targetArray->A[i];
+        i++;
+    }
+
+    while (j < addArray.length)
+    {
+        arr[i + j] = addArray.A[j];
+        j++;
+    }
+
+    struct Array newArr = {arr, newArrayLength, newArrayLength};
+
+    return newArr;
 }
 
 int main()
@@ -351,35 +394,55 @@ int main()
     // cout << "---- Reverse ----" << endl;
     // Reverse(arr);
 
-    cout << "----- Inserting in a sorted array -----" << endl;
-    struct Array arr2 = {new int(5), 10, 5};
-    for (int i = 0; i < arr2.length; i++)
+    // cout << "----- Inserting in a sorted array -----" << endl;
+    // struct Array arr2 = {new int(5), 10, 5};
+    // for (int i = 0; i < arr2.length; i++)
+    // {
+    //     arr2.A[i] = i * 2;
+    // }
+    //
+    // InsertSorted(&arr2, 5);
+    // Display(arr2);
+    //
+    // cout << "----- Is Sorted -----" << endl;
+    // struct Array arr3 = {new int(5), 10, 5};
+    // for (int i = 0; i < arr3.length; i++)
+    // {
+    //     arr3.A[i] = i * 2;
+    // }
+    // Display(arr3);
+    // cout << "Array is 1: Sorted, 0: Not sorted: " << IsSorted(arr3) << endl;
+    //
+    // cout << "----- Rearrange -----" << endl;
+    // struct Array arr4 = {new int(10), 10, 10};
+    // for (int i = 0; i < arr4.length; i++)
+    // {
+    //     int sign = rand() % 2 ? -1 : 1;
+    //     arr4.A[i] = sign * i * 3;
+    // }
+    // Display(arr4);
+    // SortNegativeToPositive(&arr4);
+    // cout << "Sorted: ";
+    // Display(arr4);
+
+
+    cout << "----- Merging Arrays -----" << endl;
+    struct Array arr5 = {{new int[5]}, 5, 5};
+    struct Array arr6 = {new int[5], 5, 5};
+
+    for (int i = 0; i < arr5.length; i++)
     {
-        arr2.A[i] = i * 2;
+        arr5.A[i] = i * 10;
     }
 
-    InsertSorted(&arr2, 5);
-    Display(arr2);
-
-    cout << "----- Is Sorted -----" << endl;
-    struct Array arr3 = {new int(5), 10, 5};
-    for (int i = 0; i < arr3.length; i++)
+    for (int i = 0; i < arr6.length; i++)
     {
-        arr3.A[i] = i * 2;
+        arr6.A[i] = i * 2 + 1;
     }
 
-    Display(arr3);
-    cout << "Array is 1: Sorted, 0: Not sorted: " << IsSorted(arr3) << endl;
-
-    cout << "----- Negative to Positive -----" << endl;
-    struct Array arr4 = {new int(10), 10, 10};
-    for (int i = 0; i < arr4.length; i++)
-    {
-        int sign = rand() % 2 ? -1 : 1;
-        arr4.A[i] = sign * i * 3;
-    }
-    Display(arr4);
-    SortNegativeToPositive(&arr4);
-    cout << "Sorted: ";
-    Display(arr4);
+    cout << "Array 5: ";
+    Display(arr5);
+    cout << "Array 6: ";
+    Display(arr6);
+    Display(MergeSorted(&arr5, arr6));
 }
