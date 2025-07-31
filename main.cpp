@@ -1,4 +1,5 @@
 #include<iostream>
+#include<cstdlib>
 
 using namespace std;
 
@@ -222,10 +223,7 @@ int Reverse(struct Array arr)
 
     while (i < j)
     {
-        int temp = arr.A[i];
-        arr.A[i] = arr.A[j];
-        arr.A[j] = temp;
-
+        Swap(&arr, i, j);
         i++;
         j--;
     }
@@ -233,66 +231,155 @@ int Reverse(struct Array arr)
     Display(arr);
 }
 
-int main()
+void InsertSorted(struct Array* arr, int value)
 {
-    struct Array arr;
-
-    cout << "Enter array size:" << endl;
-    cin >> arr.size;
-
-    arr.A = new int[arr.size];
-
-    cout << "Enter array length:" << endl;
-    cin >> arr.length;
-
-    for (int i = 0; i < arr.length; i++)
+    if (arr->length >= arr->size)
     {
-        cout << "Enter value of element: ";
-        cout << endl;
-        cin >> arr.A[i];
+        cout << "Size exceeded" << endl;
+        return;
     }
 
-    cout << "----- Display -----" << endl;
-    Display(arr);
+    int i = arr->length - 1;
 
-    cout << "----- Append 10 -----" << endl;
-    Append(&arr, 10);
-    Display(arr);
+    while (arr->A[i] > value)
+    {
+        arr->A[i + 1] = arr->A[i];
+        i--;
+    }
 
-    cout << "----- Insert value: 23 at index: 3 -----" << endl;
-    Insert(&arr, 23, 0);
-    Display(arr);
+    arr->A[i + 1] = value;
+    arr->length++;
+}
 
-    cout << "----- Delete at index: 3 -----" << endl;
-    cout << Delete(&arr, 3) << " is deleted." << endl;
-    Display(arr);
+bool IsSorted(struct Array arr)
+{
+    for (int i = 0; i < arr.length - 1; i++)
+    {
+        if (arr.A[i] > arr.A[i + 1])
+        {
+            return false;
+        }
+    }
+    return true;;
+}
 
-    cout << "----- Linear Search of value: 2 -----" << endl;
-    cout << "Found at index " << LinearSearch(&arr, 2) << endl;
-    cout << "After moving found value to head: " << endl;
-    Display(arr);
+void SortNegativeToPositive(struct Array* arr)
+{
+    int i = 0;
+    int j = arr->length - 1;
 
-    cout << "----- Binary Search of value: 3 -----" << endl;
-    // Make sure to comment line 167 - 185
-    cout << "Found at index " << BinarySearch(&arr, 3) << endl;
+    while (i < j)
+    {
+        while (arr->A[i] < 0)
+        {
+            i++;
+        }
 
-    cout << "----- Get of index: 3 -----" << endl;
-    cout << "Value at index 3: " << Get(arr, 3) << endl;
+        while (arr->A[j] >= 0)
+        {
+            j--;
+        }
 
-    cout << "----- Set index 3 to value 100 -----" << endl;
-    cout << "Value at index 3: " << Set(&arr, 3, 100) << endl;
-    Display(arr);
+        if (i < j)
+        {
+            Swap(arr, i, j);
+        }
 
-    cout << "----- Max -----" << endl;
-    cout << "Maximum value of the array: " << Max(arr) << endl;
+    }
+}
 
-    cout << "----- Min -----" << endl;
-    cout << "Minimum value of the array: " << Min(arr) << endl;
+int main()
+{
+    // struct Array arr;
 
-    cout << "----- Sum -----" << endl;
-    cout << "The sum of the array: " << Sum(arr) << endl;
-    cout << "The sum of the array using recursive approach: " << RecursiveSum(arr, arr.A[arr.length - 1]) << endl;
+    // cout << "Enter array size:" << endl;
+    // cin >> arr.size;
+    //
+    // arr.A = new int[arr.size];
+    //
+    // cout << "Enter array length:" << endl;
+    // cin >> arr.length;
+    //
+    // for (int i = 0; i < arr.length; i++)
+    // {
+    //     cout << "Enter value of element: ";
+    //     cout << endl;
+    //     cin >> arr.A[i];
+    // }
+    //
+    // cout << "----- Display -----" << endl;
+    // Display(arr);
 
-    cout << "---- Reverse ----" << endl;
-    Reverse(arr);
+    // cout << "----- Append 10 -----" << endl;
+    // Append(&arr, 10);
+    // Display(arr);
+
+    // cout << "----- Insert value: 23 at index: 3 -----" << endl;
+    // Insert(&arr, 23, 0);
+    // Display(arr);
+
+    // cout << "----- Delete at index: 3 -----" << endl;
+    // cout << Delete(&arr, 3) << " is deleted." << endl;
+    // Display(arr);
+    //
+    // cout << "----- Linear Search of value: 2 -----" << endl;
+    // cout << "Found at index " << LinearSearch(&arr, 2) << endl;
+    // cout << "After moving found value to head: " << endl;
+    // Display(arr);
+    //
+    // cout << "----- Binary Search of value: 3 -----" << endl;
+    // // Make sure to comment line 167 - 185
+    // cout << "Found at index " << BinarySearch(&arr, 3) << endl;
+    //
+    // cout << "----- Get of index: 3 -----" << endl;
+    // cout << "Value at index 3: " << Get(arr, 3) << endl;
+    //
+    // cout << "----- Set index 3 to value 100 -----" << endl;
+    // cout << "Value at index 3: " << Set(&arr, 3, 100) << endl;
+    // Display(arr);
+    //
+    // cout << "----- Max -----" << endl;
+    // cout << "Maximum value of the array: " << Max(arr) << endl;
+    //
+    // cout << "----- Min -----" << endl;
+    // cout << "Minimum value of the array: " << Min(arr) << endl;
+    //
+    // cout << "----- Sum -----" << endl;
+    // cout << "The sum of the array: " << Sum(arr) << endl;
+    // cout << "The sum of the array using recursive approach: " << RecursiveSum(arr, arr.A[arr.length - 1]) << endl;
+    //
+    // cout << "---- Reverse ----" << endl;
+    // Reverse(arr);
+
+    cout << "----- Inserting in a sorted array -----" << endl;
+    struct Array arr2 = {new int(5), 10, 5};
+    for (int i = 0; i < arr2.length; i++)
+    {
+        arr2.A[i] = i * 2;
+    }
+
+    InsertSorted(&arr2, 5);
+    Display(arr2);
+
+    cout << "----- Is Sorted -----" << endl;
+    struct Array arr3 = {new int(5), 10, 5};
+    for (int i = 0; i < arr3.length; i++)
+    {
+        arr3.A[i] = i * 2;
+    }
+
+    Display(arr3);
+    cout << "Array is 1: Sorted, 0: Not sorted: " << IsSorted(arr3) << endl;
+
+    cout << "----- Negative to Positive -----" << endl;
+    struct Array arr4 = {new int(10), 10, 10};
+    for (int i = 0; i < arr4.length; i++)
+    {
+        int sign = rand() % 2 ? -1 : 1;
+        arr4.A[i] = sign * i * 3;
+    }
+    Display(arr4);
+    SortNegativeToPositive(&arr4);
+    cout << "Sorted: ";
+    Display(arr4);
 }
