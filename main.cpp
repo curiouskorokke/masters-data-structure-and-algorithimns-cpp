@@ -215,6 +215,24 @@ int RecursiveSum(struct Array arr, int index)
     return RecursiveSum(arr, index - 1) + arr.A[index];
 } // This approach is generally not preferred as it uses "stack"
 
+int Reverse(struct Array arr)
+{
+    int i = 0;
+    int j = arr.length - 1;
+
+    while (i < j)
+    {
+        int temp = arr.A[i];
+        arr.A[i] = arr.A[j];
+        arr.A[j] = temp;
+
+        i++;
+        j--;
+    }
+
+    Display(arr);
+}
+
 int main()
 {
     struct Array arr;
@@ -274,4 +292,7 @@ int main()
     cout << "----- Sum -----" << endl;
     cout << "The sum of the array: " << Sum(arr) << endl;
     cout << "The sum of the array using recursive approach: " << RecursiveSum(arr, arr.A[arr.length - 1]) << endl;
+
+    cout << "---- Reverse ----" << endl;
+    Reverse(arr);
 }
