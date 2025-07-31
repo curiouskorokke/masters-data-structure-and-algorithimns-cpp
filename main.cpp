@@ -147,6 +147,74 @@ int BinarySearch(struct Array* arr, int value)
     return -1;
 }
 
+int Get(struct Array arr, int index)
+{
+    if (index >= 0 && index < arr.length)
+    {
+        return arr.A[index];
+    }
+    return index;
+}
+
+int Set(struct Array* arr, int index, int value)
+{
+    if (index >= 0 && index < arr->length)
+    {
+        arr->A[index] = value;
+    }
+
+    return arr->A[index];
+}
+
+int Max(struct Array arr)
+{
+    int max = arr.A[0];
+    for (int i = 1; i < arr.length; i++) // O(n-1)
+    {
+        if (arr.A[i] > max)
+        {
+            max = arr.A[i];
+        }
+    }
+
+    return max;
+} // Time complexity: O(n)
+
+int Min(struct Array arr)
+{
+    int min = arr.A[0];
+    for (int i = 1; i < arr.length; i++) // O(n-1)
+    {
+        if (arr.A[i] < min)
+        {
+            min = arr.A[i];
+        }
+    }
+
+    return min;
+} // Time complexity: O(n)
+
+int Sum(struct Array arr)
+{
+    int sum = arr.A[0]; // O(1)
+    for (int i = 1; i < arr.length; i++) // O(n)
+    {
+        sum += arr.A[i]; // O(1)
+    }
+
+    return sum;
+} // Time Complexity: O(n);
+
+int RecursiveSum(struct Array arr, int index)
+{
+    if (index < 0)
+    {
+        return 0;
+    }
+
+    return RecursiveSum(arr, index - 1) + arr.A[index];
+} // This approach is generally not preferred as it uses "stack"
+
 int main()
 {
     struct Array arr;
@@ -183,13 +251,27 @@ int main()
 
     cout << "----- Linear Search of value: 2 -----" << endl;
     cout << "Found at index " << LinearSearch(&arr, 2) << endl;
-    cout << "After moving found value to head: "<<endl;
+    cout << "After moving found value to head: " << endl;
     Display(arr);
 
     cout << "----- Binary Search of value: 3 -----" << endl;
     // Make sure to comment line 167 - 185
     cout << "Found at index " << BinarySearch(&arr, 3) << endl;
+
+    cout << "----- Get of index: 3 -----" << endl;
+    cout << "Value at index 3: " << Get(arr, 3) << endl;
+
+    cout << "----- Set index 3 to value 100 -----" << endl;
+    cout << "Value at index 3: " << Set(&arr, 3, 100) << endl;
     Display(arr);
 
+    cout << "----- Max -----" << endl;
+    cout << "Maximum value of the array: " << Max(arr) << endl;
 
+    cout << "----- Min -----" << endl;
+    cout << "Minimum value of the array: " << Min(arr) << endl;
+
+    cout << "----- Sum -----" << endl;
+    cout << "The sum of the array: " << Sum(arr) << endl;
+    cout << "The sum of the array using recursive approach: " << RecursiveSum(arr, arr.A[arr.length - 1]) << endl;
 }
