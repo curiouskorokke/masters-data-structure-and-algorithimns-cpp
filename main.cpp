@@ -95,6 +95,32 @@ int RecursiveCount(struct Node* node)
     return RecursiveCount(node->next) + 1;
 } // Time: O(n), Space: O(n)
 
+int Sum()
+{
+    struct Node* curr = (struct Node*)malloc(sizeof(struct Node));
+    curr = first;
+    int sum = 0; // Space: O(1)
+
+    while (curr != nullptr) // Time: O(n)
+    {
+        sum += curr->data;
+        curr = curr->next;
+    }
+
+    return sum;
+} // Space O(1), Time O(n)
+
+int RecursiveSum(struct Node* node)
+{
+    if (node == nullptr)
+    {
+        return 0;
+    }
+
+    return RecursiveSum(node->next) + node->data; // Space: O(n), Time: O(n)
+} // Space: O(n), Time: O(n)
+
+
 int main()
 {
     int arr[] = {1, 4, 20, 2, 8};
@@ -110,6 +136,9 @@ int main()
 
     printf("\nCount: %d", Count());
     printf("\nRecursive Count: %d", RecursiveCount(first));
+
+    printf("\nSum: %d", Sum());
+    printf("\nRecursive Sum: %d\n", RecursiveSum(first));
 
     return 0;
 }
