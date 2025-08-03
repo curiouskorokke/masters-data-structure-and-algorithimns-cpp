@@ -259,9 +259,9 @@ void InsertSorted(int value)
     if (first == nullptr)
     {
         first = newNode;
-    } else
+    }
+    else
     {
-
         while (curr && curr->data < value)
         {
             prev = curr;
@@ -281,8 +281,38 @@ void InsertSorted(int value)
             newNode->next = curr;
         }
     }
+}
 
+void Delete(int pos)
+{
+    struct Node* curr;
+    struct Node* prev;
+    curr = first;
+    int currPos = 1;
 
+    if (pos == 1)
+    {
+        first = curr->next;
+    } else
+    {
+        while (curr != nullptr)
+        {
+            if (currPos == pos)
+            {
+                prev->next = curr->next;
+                delete curr;
+                break; 
+            }
+
+            prev = curr;
+            curr = curr->next;
+            currPos++;
+        }
+    }
+}
+
+void DeleteSorted()
+{
 }
 
 int main()
@@ -329,6 +359,17 @@ int main()
     InsertSorted(0);
     InsertSorted(3);
     InsertSorted(100);
+    Display();
+
+    printf("\n ----- Delete -----");
+    printf("\n Delete mid node (3): ");
+    Delete(3);
+    Display();
+    printf("\n Delete start node (1): ");
+    Delete(1);
+    Display();
+    printf("\n Delete end node (100): ");
+    Delete(7);
     Display();
 
     return 0;
