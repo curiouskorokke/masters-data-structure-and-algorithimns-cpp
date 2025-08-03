@@ -70,6 +70,31 @@ void ReverseRecursiveDisplay(struct Node* node)
     }
 }
 
+int Count()
+{
+    struct Node* curr = (struct Node*)malloc(sizeof(struct Node));
+    curr = first;
+    int count = 0; // Space: O(1)
+
+    while (curr != nullptr) // Time: O(n)
+    {
+        curr = curr->next;
+        count++;
+    }
+
+    return count;
+} // Time: O(n), Space: O(1)
+
+int RecursiveCount(struct Node* node)
+{
+    if (node == nullptr)
+    {
+        return 0;
+    }
+
+    return RecursiveCount(node->next) + 1;
+} // Time: O(n), Space: O(n)
+
 int main()
 {
     int arr[] = {1, 4, 20, 2, 8};
@@ -83,6 +108,8 @@ int main()
     printf("\nReverse Recursive Display: ");
     ReverseRecursiveDisplay(first);
 
+    printf("\nCount: %d", Count());
+    printf("\nRecursive Count: %d", RecursiveCount(first));
 
     return 0;
 }
