@@ -49,7 +49,6 @@ void Display()
         printf("%d ", curr->data);
         curr = curr->next;
     }
-    printf("\n");
 }
 
 void RecursiveDisplay(struct Node* node)
@@ -121,24 +120,65 @@ int RecursiveSum(struct Node* node)
 } // Space: O(n), Time: O(n)
 
 
+int Max()
+{
+    struct Node* curr = (struct Node*)malloc(sizeof(struct Node));
+    curr = first;
+    int max = INT32_MIN;
+
+    while (curr != nullptr)
+    {
+        if (curr->data > max)
+        {
+            max = curr->data;
+        }
+        curr = curr->next;
+    }
+
+    return max;
+} // Space: O(1), Time: O(n)
+
+int RecursiveMax(struct Node* node)
+{
+    int max = INT32_MIN;
+
+    if (node == nullptr)
+    {
+        return max;
+    }
+
+    max = RecursiveMax(node->next);
+
+    return max > node->data ? max : node->data;
+} // Space: O(n) , Time: O(n)
+
 int main()
 {
     int arr[] = {1, 4, 20, 2, 8};
+    printf("Array Created {1, 4, 20, 2, 8}...");
     first = Create(arr, 5);
-    printf("Display: ");
+
+    printf("\n----- Display -----");
+    printf("\nDisplay: ");
     Display();
 
-    printf("Recursive Display: ");
+    printf("\nRecursive Display: ");
     RecursiveDisplay(first);
 
     printf("\nReverse Recursive Display: ");
     ReverseRecursiveDisplay(first);
 
+    printf("\n----- Count -----");
     printf("\nCount: %d", Count());
     printf("\nRecursive Count: %d", RecursiveCount(first));
 
+    printf("\n----- Sum -----");
     printf("\nSum: %d", Sum());
-    printf("\nRecursive Sum: %d\n", RecursiveSum(first));
+    printf("\nRecursive Sum: %d", RecursiveSum(first));
+
+    printf("\n----- Max -----");
+    printf("\nMax: %d", Max());
+    printf("\nRecursive Max: %d", RecursiveMax(first));
 
     return 0;
 }
