@@ -214,10 +214,82 @@ struct Node* CacheSearch(int value)
     return curr;
 }
 
+void Insert(int pos, int value)
+{
+    /*
+     * Array:        |  2  |  4  |  8  |  12  |  7  |  3  |
+     *               ^     ^     ^     ^      ^     ^     ^
+     * Index:        0  ^  1  ^  2  ^  3   ^  4  ^  5  ^  6
+     * Position:        1     2     3      4     5     6
+     *
+     * Two Cases:
+     * 1. Insertion before first
+     * 2. Insertion after position
+     */
+    struct Node* curr = (struct Node*)malloc(sizeof(struct Node));
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = nullptr;
+    curr = first;
+
+    if (pos == 0)
+    {
+        newNode->next = curr;
+        first = newNode;
+        return;
+    }
+
+    for (int i = 1; i < pos; i++)
+    {
+        curr = curr->next;
+    }
+
+    newNode->next = curr->next;
+    curr->next = newNode;
+}
+
+void InsertSorted(int value)
+{
+    struct Node* prev;
+    struct Node* curr;
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+
+    curr = first;
+
+    if (first == nullptr)
+    {
+        first = newNode;
+    } else
+    {
+
+        while (curr && curr->data < value)
+        {
+            prev = curr;
+            curr = curr->next;
+        }
+
+        if (value < first->data)
+        {
+            newNode->next = curr;
+            first = newNode;
+        }
+        else
+        {
+            newNode->data = value;
+            newNode->next = nullptr;
+            prev->next = newNode;
+            newNode->next = curr;
+        }
+    }
+
+
+}
+
 int main()
 {
-    int arr[] = {1, 4, 20, 2, 8};
-    printf("Array Created {1, 4, 20, 2, 8}...");
+    // int arr[] = {1, 4, 20, 2, 8};
+    int arr[] = {1, 2, 4, 8, 20};
+    printf("Array Created {1, 2, 4, 8, 20}...");
     first = Create(arr, 5);
 
     printf("\n----- Display -----");
@@ -246,7 +318,17 @@ int main()
     printf("\nSearch: %d", Search(20)->data);
     printf("\nRecursive Search: %d", RecursiveSearch(first, 2)->data);
     printf("\nCache: ");
-    first = CacheSearch(20);
+    first = CacheSearch(1);
+    Display();
+
+    printf("\n----- Insert -----");
+    printf("\nInsert: ");
+    Insert(5, 30);
+    Display();
+    printf("\nInsert in Sorted List: ");
+    InsertSorted(0);
+    InsertSorted(3);
+    InsertSorted(100);
     Display();
 
     return 0;
