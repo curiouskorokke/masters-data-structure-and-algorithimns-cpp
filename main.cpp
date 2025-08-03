@@ -152,6 +152,68 @@ int RecursiveMax(struct Node* node)
     return max > node->data ? max : node->data;
 } // Space: O(n) , Time: O(n)
 
+struct Node* Search(int value)
+{
+    struct Node* curr = (struct Node*)malloc(sizeof(struct Node));
+    curr = first;
+    while (curr != nullptr)
+    {
+        if (curr->data == value)
+        {
+            return curr;
+        }
+
+        curr = curr->next;
+    }
+
+    return curr;
+} // Space: O(1), Time: O(n)
+
+struct Node* RecursiveSearch(struct Node* node, int value)
+{
+    if (node == nullptr)
+    {
+        return node;
+    }
+
+    if (node->data == value)
+    {
+        return node;
+    }
+
+    return RecursiveSearch(node->next, value);
+} // Space: O(n), Time: O(n)
+
+/*
+ * Move found node to header
+ */
+struct Node* CacheSearch(int value)
+{
+    struct Node* curr = (struct Node*)malloc(sizeof(struct Node));
+    struct Node* prev = (struct Node*)malloc(sizeof(struct Node));
+    curr = first;
+
+
+    while (curr != nullptr)
+    {
+        if (curr->data == value)
+        {
+            prev->next = curr->next;
+
+            if (curr != first)
+            {
+                curr->next = first;
+            }
+
+            break;
+        }
+        prev = curr;
+        curr = curr->next;
+    }
+
+    return curr;
+}
+
 int main()
 {
     int arr[] = {1, 4, 20, 2, 8};
@@ -179,6 +241,13 @@ int main()
     printf("\n----- Max -----");
     printf("\nMax: %d", Max());
     printf("\nRecursive Max: %d", RecursiveMax(first));
+
+    printf("\n----- Search -----");
+    printf("\nSearch: %d", Search(20)->data);
+    printf("\nRecursive Search: %d", RecursiveSearch(first, 2)->data);
+    printf("\nCache: ");
+    first = CacheSearch(20);
+    Display();
 
     return 0;
 }
