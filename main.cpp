@@ -51,42 +51,50 @@ void Display()
     }
 }
 
-void Unique()
+// Using slider pointer
+void Reverse()
 {
-    struct Node* curr = (struct Node*)malloc(sizeof(struct Node));
-    struct Node* next = (struct Node*)malloc(sizeof(struct Node));
-    curr = first;
-    next = first->next;
+    struct Node* r = nullptr;
+    struct Node* q = nullptr;
+    struct Node* p = first;
 
-    while (next != nullptr)
+    while (p != nullptr)
     {
-        if (curr->data != next->data)
-        {
-            curr = next;
-            next = next->next;
-        }
-        else
-        {
-            curr->next = next->next;
-            free(next);
-            next = curr->next;
-        }
+        r = q;
+        q = p;
+        p = p->next;
+        q->next = r;
+    }
+    first = q;
+}
+
+void RecursionReverse(struct Node* q, struct Node* p)
+{
+    if (p != nullptr)
+    {
+        RecursionReverse(p, p->next);
+        p->next = q;
+    }
+    else
+    {
+        first = q;
     }
 }
 
 
 int main()
 {
-    int arr[] = {1, 2, 2, 5, 5, 5, 9, 9, 9, 9};
-    first = Create(arr, 8);
+    int arr[] = {1, 2, 5, 9};
+    first = Create(arr, 4);
 
     printf("\n----- Display -----");
     printf("\nDisplay: ");
     Display();
 
-    printf("\n----- Unique -----");
-    Unique();
-    printf("\nUnique: ");
+    printf("\n----- Reverse -----");
+    Reverse();
+    // RecursionReverse(first, first->next);
+    printf("\nReverse: ");
     Display();
 
 
