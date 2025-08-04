@@ -51,38 +51,43 @@ void Display()
     }
 }
 
-bool IsSorted()
+void Unique()
 {
-    struct Node* curr;
+    struct Node* curr = (struct Node*)malloc(sizeof(struct Node));
+    struct Node* next = (struct Node*)malloc(sizeof(struct Node));
     curr = first;
+    next = first->next;
 
-    while (curr != nullptr)
+    while (next != nullptr)
     {
-        int nextData = curr->next == nullptr ? curr->data + 1 : curr->next->data;
-        if (curr->data > nextData)
+        if (curr->data != next->data)
         {
-            return false;
+            curr = next;
+            next = next->next;
         }
-
-        curr = curr->next;
+        else
+        {
+            curr->next = next->next;
+            free(next);
+            next = curr->next;
+        }
     }
-
-    return true;
 }
 
 
 int main()
 {
-    int arr[] = {1, 4, 20, 2, 8};
-    int sortedArr[] = {1, 2, 4, 8, 20};
-    printf("Array Created {1, 2, 4, 8, 20}...");
-    first = Create(sortedArr, 5);
+    int arr[] = {1, 2, 2, 5, 5, 5, 9, 9, 9, 9};
+    first = Create(arr, 8);
 
     printf("\n----- Display -----");
     printf("\nDisplay: ");
     Display();
 
-    printf("\n Is above sorted?: %d", IsSorted());
+    printf("\n----- Unique -----");
+    Unique();
+    printf("\nUnique: ");
+    Display();
 
 
     return 0;
