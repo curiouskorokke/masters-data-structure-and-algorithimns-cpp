@@ -16,15 +16,16 @@ struct Node
 {
     int data;
     struct Node* next;
-}* first = nullptr;
+};
 
 
 struct Node* Create(const int arr[], const int n)
 {
-    struct Node* curr;
-    first = (struct Node*)malloc(sizeof(struct Node));
+    struct Node* first = (struct Node*)malloc(sizeof(struct Node));
     first->data = arr[0];
     first->next = nullptr;
+
+    struct Node* curr;
     curr = first;
 
     for (int i = 1; i < n; i++)
@@ -39,10 +40,9 @@ struct Node* Create(const int arr[], const int n)
     return first;
 }
 
-void Display()
+void Display(struct Node* node)
 {
-    struct Node* curr = (struct Node*)malloc(sizeof(struct Node));
-    curr = first;
+    struct Node* curr = node;
 
     while (curr != nullptr)
     {
@@ -51,51 +51,35 @@ void Display()
     }
 }
 
-// Using slider pointer
-void Reverse()
+void Concatenate(struct Node* target, struct Node* value)
 {
-    struct Node* r = nullptr;
-    struct Node* q = nullptr;
-    struct Node* p = first;
+    struct Node* curr = target;
 
-    while (p != nullptr)
+    while (curr->next != nullptr)
     {
-        r = q;
-        q = p;
-        p = p->next;
-        q->next = r;
+        curr = curr->next;
     }
-    first = q;
-}
 
-void RecursionReverse(struct Node* q, struct Node* p)
-{
-    if (p != nullptr)
-    {
-        RecursionReverse(p, p->next);
-        p->next = q;
-    }
-    else
-    {
-        first = q;
-    }
+    curr->next = value;
+    value = nullptr;
+
 }
 
 
 int main()
 {
     int arr[] = {1, 2, 5, 9};
-    first = Create(arr, 4);
-
+    int arr2[] = {3, 4, 6, 8};
+    struct Node* first = Create(arr, 4);
+    struct Node* second = Create(arr2, 4);
     printf("\n----- Display -----");
     printf("\nDisplay: ");
-    Display();
+    Display(first);
 
-    printf("\n----- Reverse -----");
-    Reverse();
-    // RecursionReverse(first, first->next);
-    printf("\nReverse: ");
-    Display();
+    printf("\n----- Concatenate -----");
+    printf("\nConcatenate: ");
+    Concatenate(first, second);
+    Display(first);
 
 
     return 0;
