@@ -80,47 +80,72 @@ void RDisplay(struct Node* p)
     }
 }
 
-bool IsLoop()
+int Length()
 {
     struct Node* p;
-    struct Node* q;
-    p = q = Head;
 
+    p = Head;
+    int len = 0;
     int flag = 0;
-
-    if (Head == nullptr)
-    {
-        return true;
-    }
-
-    while (p && q && p != q || flag == 0)
+    while (p != Head || flag == 0)
     {
         flag = 1;
+        len++;
         p = p->next;
-        q = q->next->next;
     }
 
-    if (p == q)
-    {
-        return true;
-    }
-
-    return false;
+    return len;
 }
 
-bool RIsLoop(struct Node* p, struct Node* q)
+/*
+* There are two conditions to consider
+* 1. Inserting at head
+* 2. Inserting between
+* 3. Empty linked list
+*/
+void Insert(int value, int pos = 0)
 {
-    if (p && q && p == q)
+    struct Node* p = Head;
+    struct Node* t = (struct Node*)malloc(sizeof(struct Node));
+    t->data = value;
+
+
+    if (pos < 0 || pos > Length())
     {
-        return true;
+        return;
     }
 
-    if (!p || !q)
+    if (pos == 0)
     {
-        return false;
+        if (Head == nullptr)
+        {
+            Head = t;
+            Head->next = Head;
+        }
+        else
+        {
+            t->next = Head;
+            while (p->next != Head)
+            {
+                p = p->next;
+            }
+            p->next = t;
+            Head = t;
+        }
     }
+    else
+    {
+        // Inserting in between
 
-    return RIsLoop(p->next, q->next->next);
+        t->next = nullptr;
+        for (int i = 0; i < pos - 1; i++)
+        {
+            p = p->next;
+        }
+
+        t->next = p->next;
+        p->next = t;
+    }
 }
 
 
@@ -134,9 +159,14 @@ int main()
     printf("\nDisplay Recursive Loop: ");
     RDisplay(Head);
 
-    printf("\n----- IsLoop -----");
-    printf("\nIsLoop: %d", IsLoop());
-    printf("\nRIsLoop: %d", RIsLoop(Head, Head));
+    printf("\n----- Length -----");
+    printf("\nLength: %d", Length());;
+
+    printf("\n----- Inserted -----");
+    printf("\nInserted: ");
+    Insert(4, 8);
+    Display();
+
 
     return 0;
 }
