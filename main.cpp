@@ -16,89 +16,79 @@ struct Node
 {
     int data;
     struct Node* next;
-};
+} * Head;
 
 
-struct Node* Create(const int arr[], const int n)
+void Create(const int arr[], const int n)
 {
-    struct Node* first = (struct Node*)malloc(sizeof(struct Node));
-    first->data = arr[0];
-    first->next = nullptr;
+    struct Node* p;
+    p = nullptr;
+    Head = p;
 
-    struct Node* curr;
-    curr = first;
-
-    for (int i = 1; i < n; i++)
+    if (n != 0)
     {
-        struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-        newNode->data = arr[i];
-        newNode->next = nullptr;
-        curr->next = newNode;
-        curr = newNode;
-    }
-
-    return first;
-}
-
-void Display(struct Node* node)
-{
-    struct Node* curr = node;
-
-    while (curr != nullptr)
-    {
-        printf("%d ", curr->data);
-        curr = curr->next;
-    }
-}
-
-void Merging(struct Node* first, struct Node* second)
-{
-    struct Node* third = (struct Node*)malloc(sizeof(struct Node));
-    third == nullptr;
-
-    while (first && second)
-    {
-        if (first->data < second->data)
+        for (int i = 1; i < n + 1; i++)
         {
-            third->next = first;
-            first = first->next;
-        }
-        else
-        {
-            third->next = second;
-            second = second->next;
-        }
-        third = third->next;
-        third->next = nullptr;
-    }
+            struct Node* t = (struct Node*)malloc(sizeof(struct Node));
+            t->data = arr[i - 1];
+            t->next = nullptr;
 
-    if (first != nullptr)
-    {
-        third->next = first;
-    }
+            if (i == 1)
+            {
+                p = t;
+                p->next = t;
+                Head = p;
+            }
+            else
+            {
+                p->next = t;
+                p = p->next;
+            }
+        }
 
-    if (second != nullptr)
-    {
-        third->next = second;
+        p->next = Head;
     }
 }
+
+void Display()
+{
+    if (Head == nullptr)
+    {
+        return;
+    }
+
+    struct Node* p = Head;
+
+    int flag = 0;
+    while (p != Head || flag == 0)
+    {
+        flag = 1;
+        printf("%d ", p->data);
+        p = p->next;
+    }
+}
+
+void RDisplay(struct Node* p)
+{
+    static int flag = 0;
+    if (p != Head || flag == 0)
+    {
+        flag = 1;
+        printf("%d ", p->data);
+        RDisplay(p->next);
+    }
+}
+
 
 int main()
 {
-    int arr[] = {1, 2, 5, 9};
-    int arr2[] = {3, 4, 6, 8};
-    struct Node* first = Create(arr, 4);
-    struct Node* second = Create(arr2, 4);
+    int arr[] = {1, 2, 5, 7, 9, 10, 14, 18};
+    Create(arr, 8);
     printf("\n----- Display -----");
-    printf("\nDisplay: ");
-    Display(first);
-    printf("\nDisplay: ");
-    Display(second);
-
-    printf("\n----- Merging -----");
-    printf("\nMerging: ");
-    Merging(first, second);
-    Display(first);
+    printf("\nDisplay Loop: ");
+    Display();
+    printf("\nDisplay Recursive Loop: ");
+    RDisplay(Head);
 
     return 0;
 }
