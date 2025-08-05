@@ -51,20 +51,37 @@ void Display(struct Node* node)
     }
 }
 
-void Concatenate(struct Node* target, struct Node* value)
+void Merging(struct Node* first, struct Node* second)
 {
-    struct Node* curr = target;
+    struct Node* third = (struct Node*)malloc(sizeof(struct Node));
+    third == nullptr;
 
-    while (curr->next != nullptr)
+    while (first && second)
     {
-        curr = curr->next;
+        if (first->data < second->data)
+        {
+            third->next = first;
+            first = first->next;
+        }
+        else
+        {
+            third->next = second;
+            second = second->next;
+        }
+        third = third->next;
+        third->next = nullptr;
     }
 
-    curr->next = value;
-    value = nullptr;
+    if (first != nullptr)
+    {
+        third->next = first;
+    }
 
+    if (second != nullptr)
+    {
+        third->next = second;
+    }
 }
-
 
 int main()
 {
@@ -75,12 +92,13 @@ int main()
     printf("\n----- Display -----");
     printf("\nDisplay: ");
     Display(first);
+    printf("\nDisplay: ");
+    Display(second);
 
-    printf("\n----- Concatenate -----");
-    printf("\nConcatenate: ");
-    Concatenate(first, second);
+    printf("\n----- Merging -----");
+    printf("\nMerging: ");
+    Merging(first, second);
     Display(first);
-
 
     return 0;
 }
