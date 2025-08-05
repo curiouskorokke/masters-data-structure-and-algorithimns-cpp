@@ -97,57 +97,49 @@ int Length()
     return len;
 }
 
-/*
-* There are two conditions to consider
-* 1. Inserting at head
-* 2. Inserting between
-* 3. Empty linked list
-*/
-void Insert(int value, int pos = 0)
+int Delete(int pos)
 {
-    struct Node* p = Head;
-    struct Node* t = (struct Node*)malloc(sizeof(struct Node));
-    t->data = value;
-
-
-    if (pos < 0 || pos > Length())
+    int x;
+    if (pos > 0 && pos <= Length())
     {
-        return;
-    }
+        struct Node* p;
+        p = Head;
 
-    if (pos == 0)
-    {
-        if (Head == nullptr)
+        if (pos == 1)
         {
-            Head = t;
-            Head->next = Head;
-        }
-        else
-        {
-            t->next = Head;
             while (p->next != Head)
             {
                 p = p->next;
             }
-            p->next = t;
-            Head = t;
-        }
-    }
-    else
-    {
-        // Inserting in between
 
-        t->next = nullptr;
-        for (int i = 0; i < pos - 1; i++)
+            struct Node* q;
+            q = p->next;
+            p->next = q->next;
+            x = q->data;
+            Head = q->next;
+
+            if (p == q)
+            {
+                Head = nullptr;
+            }
+            delete q;
+        }
+        else
         {
-            p = p->next;
+            for (int i = 1; i < pos - 1; i++)
+            {
+                p = p->next;
+            }
+            struct Node* q;
+            q = p->next;
+            p->next = q->next;
+            x = q->data;
+            delete q;
         }
-
-        t->next = p->next;
-        p->next = t;
     }
-}
 
+    return x;
+}
 
 int main()
 {
@@ -162,9 +154,9 @@ int main()
     printf("\n----- Length -----");
     printf("\nLength: %d", Length());;
 
-    printf("\n----- Inserted -----");
-    printf("\nInserted: ");
-    Insert(4, 8);
+    printf("\n----- Delete -----");
+    printf("\nDelete: %d", Delete(5));
+    printf("\nDisplay: ");
     Display();
 
 
