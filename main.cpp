@@ -50,6 +50,7 @@ void Create(const int arr[], const int n)
     }
 }
 
+
 void Display()
 {
     if (Head == nullptr)
@@ -71,12 +72,55 @@ void Display()
 void RDisplay(struct Node* p)
 {
     static int flag = 0;
-    if (p != Head || flag == 0)
+    if ((p != Head || flag == 0) && Head != nullptr)
     {
         flag = 1;
         printf("%d ", p->data);
         RDisplay(p->next);
     }
+}
+
+bool IsLoop()
+{
+    struct Node* p;
+    struct Node* q;
+    p = q = Head;
+
+    int flag = 0;
+
+    if (Head == nullptr)
+    {
+        return true;
+    }
+
+    while (p && q && p != q || flag == 0)
+    {
+        flag = 1;
+        p = p->next;
+        q = q->next->next;
+    }
+
+    if (p == q)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool RIsLoop(struct Node* p, struct Node* q)
+{
+    if (p && q && p == q)
+    {
+        return true;
+    }
+
+    if (!p || !q)
+    {
+        return false;
+    }
+
+    return RIsLoop(p->next, q->next->next);
 }
 
 
@@ -89,6 +133,10 @@ int main()
     Display();
     printf("\nDisplay Recursive Loop: ");
     RDisplay(Head);
+
+    printf("\n----- IsLoop -----");
+    printf("\nIsLoop: %d", IsLoop());
+    printf("\nRIsLoop: %d", RIsLoop(Head, Head));
 
     return 0;
 }
