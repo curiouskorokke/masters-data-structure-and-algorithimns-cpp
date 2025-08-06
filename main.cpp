@@ -75,34 +75,28 @@ void RDisplay(struct Node* p)
     RDisplay(p->next);
 }
 
-void Insert(int pos, int value)
+
+void Delete(int pos)
 {
-    if (pos >= 0 && pos <= Length())
+    if (pos > 0 && pos <= Length())
     {
-        struct Node* p = (struct Node*)malloc(sizeof(struct Node));
-        p->prev = p->next = nullptr;
-        p->data = value;
+        struct Node* p = first;
 
-
-        if (pos == 0)
+        if (pos == 1)
         {
-            p->next = first;
-            first->prev = p;
-            first = p;
+            p->next->prev = nullptr;
         }
         else
         {
-            struct Node* q;
-            q = first;
-
             for (int i = 2; i <= pos; i++)
             {
-                q = q->next;
+                p = p->next;
             }
 
-            p->prev = q;
-            p->next = q->next;
-            q->next = p;
+            p->prev->next = p->next;
+            if (p->next)  p->next->prev = p->prev;
+
+            delete p;
         }
     }
 }
@@ -118,9 +112,9 @@ int main()
     printf("\nRDisplay: ");
     RDisplay(first);
 
-    printf("\n----- Insert -----");
-    printf("\nInsert: ");
-    Insert(4, 4);
+    printf("\n----- Delete -----");
+    printf("\nDelete: ");
+    Delete(4);
     Display();
 
     return 0;
