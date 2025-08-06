@@ -39,6 +39,19 @@ void Create(const int arr[], const int n)
     }
 }
 
+int Length()
+{
+    struct Node* p = first;
+    int i = 0;
+    while (p != nullptr)
+    {
+        p = p->next;
+        i++;
+    }
+
+    return i;
+}
+
 void Display()
 {
     struct Node* p;
@@ -62,6 +75,38 @@ void RDisplay(struct Node* p)
     RDisplay(p->next);
 }
 
+void Insert(int pos, int value)
+{
+    if (pos >= 0 && pos <= Length())
+    {
+        struct Node* p = (struct Node*)malloc(sizeof(struct Node));
+        p->prev = p->next = nullptr;
+        p->data = value;
+
+
+        if (pos == 0)
+        {
+            p->next = first;
+            first->prev = p;
+            first = p;
+        }
+        else
+        {
+            struct Node* q;
+            q = first;
+
+            for (int i = 2; i <= pos; i++)
+            {
+                q = q->next;
+            }
+
+            p->prev = q;
+            p->next = q->next;
+            q->next = p;
+        }
+    }
+}
+
 int main()
 {
     int arr[] = {1, 2, 5, 9};
@@ -72,6 +117,11 @@ int main()
     Display();
     printf("\nRDisplay: ");
     RDisplay(first);
+
+    printf("\n----- Insert -----");
+    printf("\nInsert: ");
+    Insert(4, 4);
+    Display();
 
     return 0;
 }
