@@ -2,143 +2,162 @@
 
 using namespace std;
 
-struct Node
+class Node
 {
+public:
     int data;
-    struct Node* next;
-}* top = nullptr;
-
+    Node* next;
+};
 
 /*
- * There's no need for create since linked list don't follow a fixed size
+ * There's no need for create method since linked list don't follow a fixed size
  * declaration like array.
  */
-void Push(int x)
+class Stack
 {
-    struct Node* t = (struct Node*)malloc(sizeof(struct Node));
+private:
+    Node* top;
 
-    if (t == nullptr)
+public:
+    Stack()
     {
-        printf("Out of memory!");
-        return;
+        top = nullptr;
     }
 
-    t->data = x;
-    t->next = top;
-    top = t;
-}
-
-int Pop()
-{
-    int x = -1;
-
-    if (top == nullptr)
+    ~Stack()
     {
-        printf("\nOy! It's an empty stack mate!");
+        delete top;
+    }
+
+    void Push(int x)
+    {
+        Node* t = new Node();
+
+        if (t == nullptr)
+        {
+            printf("Out of memory!");
+            return;
+        }
+
+        t->data = x;
+        t->next = top;
+        top = t;
+    }
+
+    int Pop()
+    {
+        int x = -1;
+
+        if (top == nullptr)
+        {
+            printf("\nOy! It's an empty stack mate!");
+            return x;
+        }
+
+        struct Node* p;
+        p = top;
+        x = top->data;
+        top = top->next;
+
+        free(p);
+
         return x;
     }
 
-    struct Node* p;
-    p = top;
-    x = top->data;
-    top = top->next;
-
-    free(p);
-
-    return x;
-}
-
-void Display()
-{
-    struct Node* p;
-    p = top;
-
-    while (p != nullptr)
+    void Display()
     {
-        printf("%d ", p->data);
-        p = p->next;
-    }
-}
+        Node* p;
+        p = top;
 
-int IsEmpty()
-{
-    return top == nullptr;
-}
-
-int IsFull()
-{
-    struct Node* t = (struct Node*)malloc(sizeof(struct Node));
-
-    if (t == nullptr)
-    {
-        return 1;
+        while (p != nullptr)
+        {
+            printf("%d ", p->data);
+            p = p->next;
+        }
     }
 
-    free(t);
-    return 0;
-}
-
-int Peek(int pos)
-{
-    int x = -1;
-    struct Node* p;
-    p = top;
-
-    for (int i = 0; p != nullptr && i < pos; i++)
+    bool IsEmpty()
     {
-        p = p->next;
+        return top == nullptr;
     }
 
-    if (p != nullptr) x = p->data;
-
-    return x;
-}
-
-int StackTop()
-{
-    if (top == nullptr)
+    bool IsFull()
     {
-        return -1;
+        Node* t = new Node();
+
+        if (t == nullptr)
+        {
+            return 1;
+        }
+
+        delete t;
+        return 0;
     }
 
-    return top->data;
-}
+    int Peek(int pos)
+    {
+        int x = -1;
+        Node* p;
+        p = top;
+
+        for (int i = 0; p != nullptr && i < pos; i++)
+        {
+            p = p->next;
+        }
+
+        if (p != nullptr) x = p->data;
+
+        return x;
+    }
+
+    int StackTop()
+    {
+        if (top == nullptr)
+        {
+            return -1;
+        }
+
+        return top->data;
+    };
+};
 
 int main()
 {
-    printf("\n----- Time to push! -----");
-    Push(1);
-    Push(2);
-    Push(3);
-    Push(4);
-    Push(5);
-    printf("\nDisplay: ");
-    Display();
+    Stack* stk = new Stack();
+    cout << "----- Time to push! -----" << endl;;
+    cout << "Push 1: " << endl;
+    stk->Push(1);
+    cout << "Push 2: " << endl;
+    stk->Push(2);
+    cout << "Push 3: " << endl;
+    stk->Push(3);
+    cout << "Push 4: " << endl;
+    stk->Push(4);
+    cout << "Push 5: " << endl;
+    stk->Push(5);
 
-    printf("\n----- Time to pop, pop! -----");
-    printf("\nPop!: %d", Pop());
-    printf("\nPop!: %d", Pop());
-    printf("\nPop!: %d", Pop());
-    printf("\nDisplay: ");
-    Display();
+    cout << "----- Time to pop! -----" << endl;
+    cout << "Pop: " << stk->Pop() << endl;
+    cout << "Pop: " << stk->Pop() << endl;
 
-    printf("\n----- Time to take a peek! -----");
-    printf("\nPeek: %d", Peek(1));
+    cout << "---- Display -----" << endl;
+    stk->Display();
+    cout<<endl;
 
-    printf("\n----- IsEmpty -----");
-    printf("\nIsEmpty: %d", IsEmpty());
+    cout << "---- IsEmpty -----" << endl;
+    cout << "IsEmpty: " << stk->IsEmpty()<<endl;
 
-    printf("\n----- Stack Top -----");
-    printf("\nStack Top: %d", StackTop());
+    cout << "---- IsFull -----" << endl;
+    cout << "IsFull: " << stk->IsFull()<<endl;
 
-    printf("\nPop!: %d", Pop());
-    printf("\nPop!: %d", Pop());
-    printf("\n----- IsEmpty -----");
-    printf("\nIsEmpty: %d", IsEmpty());
+    cout << "---- Peek -----" << endl;
+    cout << "Peek: " << stk->Peek(1)<<endl;
 
-    printf("\n----- IsFull -----");
-    printf("\nIsFull: %d", IsFull());
+    cout << "---- StackTop -----" << endl;
+    cout << "StackTop: " << stk->StackTop()<<endl;
 
 
+
+    delete stk;
     return 0;
 }
