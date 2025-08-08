@@ -50,7 +50,6 @@ public:
 
         if (top == nullptr)
         {
-            printf("\nOy! It's an empty stack mate!");
             return x;
         }
 
@@ -121,43 +120,52 @@ public:
     };
 };
 
-int main()
+bool IsParenthesisBalance(char* str)
 {
     Stack* stk = new Stack();
-    cout << "----- Time to push! -----" << endl;;
-    cout << "Push 1: " << endl;
-    stk->Push(1);
-    cout << "Push 2: " << endl;
-    stk->Push(2);
-    cout << "Push 3: " << endl;
-    stk->Push(3);
-    cout << "Push 4: " << endl;
-    stk->Push(4);
-    cout << "Push 5: " << endl;
-    stk->Push(5);
 
-    cout << "----- Time to pop! -----" << endl;
-    cout << "Pop: " << stk->Pop() << endl;
-    cout << "Pop: " << stk->Pop() << endl;
+    bool match = true;
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        int curr = str[i];
 
-    cout << "---- Display -----" << endl;
-    stk->Display();
-    cout<<endl;
+        if (curr == 40 || curr == 91 || curr == 123)
+        {
+            stk->Push(curr);
+            continue;
+        }
 
-    cout << "---- IsEmpty -----" << endl;
-    cout << "IsEmpty: " << stk->IsEmpty()<<endl;
+        if (curr == 41 || curr == 93 || curr == 125)
+        {
 
-    cout << "---- IsFull -----" << endl;
-    cout << "IsFull: " << stk->IsFull()<<endl;
+            int latest = stk->Pop();
 
-    cout << "---- Peek -----" << endl;
-    cout << "Peek: " << stk->Peek(1)<<endl;
+            if ((latest == 40 && latest == curr - 1) || ((latest == 91 || latest == 123) && latest == curr - 2))
+            {
+                continue;
+            }
 
-    cout << "---- StackTop -----" << endl;
-    cout << "StackTop: " << stk->StackTop()<<endl;
+            match = false;
+            break;
+        }
+    }
 
-
+    if (!stk->IsEmpty())
+    {
+        match = false;
+    }
 
     delete stk;
+
+    return match;
+}
+
+int main()
+{
+    char str[] = "({[{}]}{})";
+
+    cout << "Parenthesis balance: " << IsParenthesisBalance(str) << endl;
+
+
     return 0;
 }
