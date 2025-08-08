@@ -2,115 +2,142 @@
 
 using namespace std;
 
-struct Stack
+struct Node
 {
-    int* arr;
-    int size;
-    int top;
-}* stArr = nullptr;
+    int data;
+    struct Node* next;
+}* top = nullptr;
 
-void Create()
-{
-    stArr = (struct Stack*)malloc(sizeof(struct Stack));
-    printf("Enter size of stack: ");
-    scanf("%d", &stArr->size);
-    stArr->arr = (int*)malloc(stArr->size * sizeof(int));
-    stArr->top = -1;
-}
 
-void Display()
-{
-    for (int i = 0; i <= stArr->top; i++)
-        printf("%d ", stArr->arr[i]);
-
-    printf("\n");
-}
-
+/*
+ * There's no need for create since linked list don't follow a fixed size
+ * declaration like array.
+ */
 void Push(int x)
 {
-    if (stArr->top == stArr->size - 1)
+    struct Node* t = (struct Node*)malloc(sizeof(struct Node));
+
+    if (t == nullptr)
     {
-        printf("\nStack size overflow.");
+        printf("Out of memory!");
         return;
     }
 
-    stArr->arr[stArr->top + 1] = x;
-    stArr->top++;
+    t->data = x;
+    t->next = top;
+    top = t;
 }
 
 int Pop()
 {
-
     int x = -1;
-    if (x == stArr->top)
+
+    if (top == nullptr)
     {
-        printf("Stack is underflow.");
+        printf("\nOy! It's an empty stack mate!");
         return x;
     }
 
-    x = stArr->arr[stArr->top--];
+    struct Node* p;
+    p = top;
+    x = top->data;
+    top = top->next;
+
+    free(p);
+
     return x;
-
 }
 
-bool IsEmpty()
+void Display()
 {
-    if (stArr->top == -1)
-    {
-        return true;
-    }
+    struct Node* p;
+    p = top;
 
-    return false;
+    while (p != nullptr)
+    {
+        printf("%d ", p->data);
+        p = p->next;
+    }
 }
 
-bool IsFull()
+int IsEmpty()
 {
-    if (stArr->top == stArr->size - 1)
-    {
-        return true;
-    }
-
-    return false;
+    return top == nullptr;
 }
 
-int Peek(int index)
+int IsFull()
 {
-    if (index > 0 && index < stArr->size)
+    struct Node* t = (struct Node*)malloc(sizeof(struct Node));
+
+    if (t == nullptr)
     {
-        return stArr->arr[index];
+        return 1;
     }
 
-    return index;
+    free(t);
+    return 0;
+}
+
+int Peek(int pos)
+{
+    int x = -1;
+    struct Node* p;
+    p = top;
+
+    for (int i = 0; p != nullptr && i < pos; i++)
+    {
+        p = p->next;
+    }
+
+    if (p != nullptr) x = p->data;
+
+    return x;
+}
+
+int StackTop()
+{
+    if (top == nullptr)
+    {
+        return -1;
+    }
+
+    return top->data;
 }
 
 int main()
 {
-    Create();
-
-    printf("----- Display -----\n");
-    printf("Display: ");
-    Display();
-
-    printf("----- Push -----\n");
+    printf("\n----- Time to push! -----");
+    Push(1);
+    Push(2);
+    Push(3);
     Push(4);
-    Push(10);
-    Push(14);
-    Push(18);
-    Push(22);
-    printf("Push: ");
+    Push(5);
+    printf("\nDisplay: ");
     Display();
 
-    printf("\n----- Pop -----");
-    printf("\nPop: %d", Pop());
+    printf("\n----- Time to pop, pop! -----");
+    printf("\nPop!: %d", Pop());
+    printf("\nPop!: %d", Pop());
+    printf("\nPop!: %d", Pop());
+    printf("\nDisplay: ");
+    Display();
 
+    printf("\n----- Time to take a peek! -----");
+    printf("\nPeek: %d", Peek(1));
+
+    printf("\n----- IsEmpty -----");
+    printf("\nIsEmpty: %d", IsEmpty());
+
+    printf("\n----- Stack Top -----");
+    printf("\nStack Top: %d", StackTop());
+
+    printf("\nPop!: %d", Pop());
+    printf("\nPop!: %d", Pop());
     printf("\n----- IsEmpty -----");
     printf("\nIsEmpty: %d", IsEmpty());
 
     printf("\n----- IsFull -----");
     printf("\nIsFull: %d", IsFull());
-
-    printf("\n----- Peak at 3 -----");
-    printf("\nPeak: %d", Peek(3));
 
 
     return 0;
