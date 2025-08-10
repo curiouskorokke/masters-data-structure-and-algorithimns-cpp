@@ -225,11 +225,11 @@ int GetPrecedence(char operand)
         return 2;
     }
 
-    return 0;
+    return 3;
 }
 
 
-// Method one.
+// Method two
 char* InfixToPostfixConversion(char* infix)
 {
     Stack* st = new Stack();
@@ -240,23 +240,20 @@ char* InfixToPostfixConversion(char* infix)
     {
         char curr = infix[i];
 
-        if (IsOperand(curr))
-        {
-            postfix[j++] = infix[i++];
-        }
-        else
-        {
-            int currPrecedence = GetPrecedence(curr);
+        int currPrecedence = GetPrecedence(curr);
 
-            while (currPrecedence <= GetPrecedence(st->StackTop()))
+        if (!st->IsEmpty())
+        {
+            while (st->StackTop() != -1 && currPrecedence <= GetPrecedence(st->StackTop()))
             {
                 postfix[j++] = st->Pop();
             }
-
-            st->Push(curr);
-            i++;
         }
+
+        st->Push(curr);
+        i++;
     }
+
 
     while (!st->IsEmpty())
     {
