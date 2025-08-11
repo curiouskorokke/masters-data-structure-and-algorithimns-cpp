@@ -2,10 +2,11 @@
 
 using namespace std;
 
+template <typename T>
 class Node
 {
 public:
-    char data;
+    T data;
     Node* next;
 };
 
@@ -13,10 +14,11 @@ public:
  * There's no need for create method since linked list don't follow a fixed size
  * declaration like array.
  */
+template <typename T>
 class Stack
 {
 private:
-    Node* top;
+    Node<T>* top;
 
 public:
     Stack()
@@ -29,9 +31,9 @@ public:
         delete top;
     }
 
-    void Push(char x)
+    void Push(T x)
     {
-        Node* t = new Node();
+        Node<T>* t = new Node<T>();
 
         if (t == nullptr)
         {
@@ -44,7 +46,7 @@ public:
         top = t;
     }
 
-    int Pop()
+    T Pop()
     {
         int x = -1;
 
@@ -53,7 +55,7 @@ public:
             return x;
         }
 
-        struct Node* p;
+        struct Node<T>* p;
         p = top;
         x = top->data;
         top = top->next;
@@ -65,7 +67,7 @@ public:
 
     void Display()
     {
-        Node* p;
+        Node<T>* p;
         p = top;
 
         while (p != nullptr)
@@ -82,7 +84,7 @@ public:
 
     bool IsFull()
     {
-        Node* t = new Node();
+        Node<T>* t = new Node<T>();
 
         if (t == nullptr)
         {
@@ -93,10 +95,10 @@ public:
         return 0;
     }
 
-    int Peek(int pos)
+    T Peek(int pos)
     {
         int x = -1;
-        Node* p;
+        Node<T>* p;
         p = top;
 
         for (int i = 0; p != nullptr && i < pos; i++)
@@ -109,7 +111,7 @@ public:
         return x;
     }
 
-    char StackTop()
+    T StackTop()
     {
         if (top == nullptr)
         {
@@ -122,6 +124,28 @@ public:
 
 /*
  * Infix, prefix & postfix
+ *
+ * ---- The Why -----
+ * Why converting to postfix is necessary ? Because
+ * without it we would need to re-evaluate the equation
+ * x times based on the precedence of an operator.
+ *
+ * For instance:
+ * Imagine a string of equation given as such
+ * a + (b + c) * d
+ *
+ * 1st iteration: b + c
+ * 2nd iteration: (b + c) * d
+ * 3rd iteration: a + (b + c) * d
+ *
+ * It takes three loops and various conditions to get the answer!
+ *
+ * But by converting the equation to postfix using stack
+ * bc+d*a+
+ *
+ * Then using stack, to evaluate them
+ * It only requires a single iteration!
+ * Read below for more.
  *
  * Rules:
  * 1. Equation must be fully parenthesis
@@ -232,7 +256,7 @@ int GetPrecedence(char operand)
 // Method two
 char* InfixToPostfixConversion(char* infix)
 {
-    Stack* st = new Stack();
+    Stack<char>* st = new Stack<char>();
     char* postfix = new char[strlen(infix) + 1];
     int i = 0, j = 0;
 
@@ -266,11 +290,59 @@ char* InfixToPostfixConversion(char* infix)
     return postfix;
 }
 
+/*
+ * After converting to postfix, it's time to EVALUATE!
+ * abc*+de/-
+ *
+ */
+
+int PostfixResult(char* postfix)
+{
+    Stack<int>* st = new Stack<int>();
+    int result;
+
+    for (int i = 0; postfix[i] != '\0'; i++)
+    {
+        const char curr = postfix[i];
+
+        if (IsOperand(curr))
+        {
+            st->Push(curr - '0');
+        }
+        else
+        {
+            const int operand2 = st->Pop();
+            const int operand1 = st->Pop();
+
+            switch (curr)
+            {
+            case '+':
+                result = operand1 + operand2;
+                break;
+            case '-':
+                result = operand1 - operand2;
+                break;
+            case '*':
+                result = operand1 * operand2;
+                break;
+            case '/':
+                result = operand1 / operand2;
+                break;
+            }
+
+            st->Push(result);
+        }
+    }
+
+    return st->Pop();
+}
+
 
 int main()
 {
-    char* infix = "a+b*c-d/e";
-
-    cout << InfixToPostfixConversion(infix) << endl;
+    char* infix = "4+3*2-6/3";
+    char* postfix = InfixToPostfixConversion(infix);
+    int result = PostfixResult(postfix);
+    cout << result << endl;
     return 0;
 }
