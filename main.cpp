@@ -234,26 +234,38 @@ public:
 
 bool IsOperand(char x)
 {
-    return x != '+' && x != '-' && x != '*' && x != '/';
+    return x != '+' && x != '-' && x != '*' && x != '/' && x != '^' && x != '(' && x != ')';
 }
 
-int GetPrecedence(char operand)
+int GetPrecedence(int env, char operatorStr)
 {
-    if (operand == '+' || operand == '-')
+    int precedence = 8;
+    // env - 0: Out of stack, 1: In of stack
+    switch (operatorStr)
     {
-        return 1;
+    case '+':
+    case '-':
+        precedence = env ? 2 : 1;
+        break;
+    case '*':
+    case '/':
+        precedence = env ? 4 : 3;
+        break;
+    case '^':
+        precedence = env ? 5 : 6;
+        break;
+    case '(':
+        precedence = env ? 0 : 7;
+        break;
+    case ')':
+        precedence = 0;
+        break;
     }
 
-    if (operand == '*' || operand == '/')
-    {
-        return 2;
-    }
-
-    return 3;
+    return precedence;
 }
 
 
-// Method two
 char* InfixToPostfixConversion(char* infix)
 {
     Stack<char>* st = new Stack<char>();
@@ -264,20 +276,28 @@ char* InfixToPostfixConversion(char* infix)
     {
         char curr = infix[i];
 
-        int currPrecedence = GetPrecedence(curr);
+        int currOutOfStackPrecedence = GetPrecedence(0, curr);
 
         if (!st->IsEmpty())
         {
-            while (st->StackTop() != -1 && currPrecedence <= GetPrecedence(st->StackTop()))
+            while (st->StackTop() != -1 && currOutOfStackPrecedence <= GetPrecedence(1, st->StackTop()))
             {
-                postfix[j++] = st->Pop();
+                char stackTopCurr = st->Pop();
+                if (stackTopCurr == '(' && curr == ')')
+                {
+                    break;
+                }
+
+                postfix[j++] = stackTopCurr;
             }
         }
 
-        st->Push(curr);
+        if (curr != ')')
+        {
+            st->Push(curr);
+        }
         i++;
     }
-
 
     while (!st->IsEmpty())
     {
@@ -328,6 +348,17 @@ int PostfixResult(char* postfix)
             case '/':
                 result = operand1 / operand2;
                 break;
+            case '^':
+                result = operand1;
+                int j = 0;
+                while (j<operand2 - 1)
+                {
+                    result *= operand1;
+                    j++;
+                }
+
+
+
             }
 
             st->Push(result);
@@ -340,9 +371,12 @@ int PostfixResult(char* postfix)
 
 int main()
 {
-    char* infix = "4+3*2-6/3";
+    char* infix = "4*3-(6/3)^3";
     char* postfix = InfixToPostfixConversion(infix);
     int result = PostfixResult(postfix);
-    cout << result << endl;
+    cout << "Postfix: "<<postfix<<endl;
+    cout<< "Result: "<<result<<endl;
     return 0;
+
+
 }
