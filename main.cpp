@@ -24,104 +24,111 @@ using namespace std;
  *
  */
 
-struct Queue
+template <typename T>
+struct Node
 {
-    int size;
-    int first;
-    int rear;
-    int* Q;
+    T data;
+    Node* next;
 };
 
-struct Queue* Create(struct Queue* q, int size)
+template <typename T>
+struct Queue
 {
-    q = (struct Queue*)malloc(sizeof(struct Queue));
-    q->size = size;
-    q->first = q->rear = 0;
-    q->Q = (int*)malloc(size * sizeof(int));
+    Node<T>* first;
+    Node<T>* rear;
+};
+
+template <typename T>
+struct Queue<T>* Create(struct Queue<T>* q)
+{
+    q = (struct Queue<T>*)malloc(sizeof(struct Queue<T>));
+    q->first = nullptr;
+    q->rear = nullptr;
 
     return q;
 }
 
-bool IsEmpty(struct Queue* q)
+template <typename T>
+bool IsEmpty(struct Queue<T>* q)
 {
-    return q->rear == q->first;
+    return !(q->first && q->rear);
 }
 
-bool IsFull(struct Queue* q)
+template <typename T>
+T Enqueue(struct Queue<T>* q, T value)
 {
-    return (q->rear + 1) % q->size == q->first;
-}
-
-int Enqueue(struct Queue* q, int value)
-{
-    if (IsFull(q))
-    {
-        printf("\nUh-oh. Think again! Queue is full.");
-        return -1;
-    }
-
-    q->rear = (q->rear + 1) % q->size;
-    q->Q[q->rear] = value;
-
-    // if (IsFull(q) && q->first != 0) q->rear = 0;
-    return value;
-}
-
-int Dequeue(struct Queue* q)
-{
-    int x = -1;
+    struct Node<T>* p = (struct Node<T>*)malloc(sizeof(struct Node<T>));
+    p->data = value;
+    p->next = nullptr;
 
     if (IsEmpty(q))
     {
-        printf("\nMan, queue is empty. Add some spice in it first.");
+        q->first = q->rear = p;
+    }
+    else
+    {
+        q->rear->next = p;
+        q->rear = p;
+    }
+
+    return p->data;
+}
+
+template <typename T>
+T Dequeue(struct Queue<T>* q)
+{
+    T x = -1;
+
+    if (IsEmpty(q))
+    {
         return x;
     }
 
-    q->first = (q->first + 1) % q->size;
-    x = q->Q[q->first];
+    if (q->first == q->rear)
+    {
+        x = q->rear->data;
+        q->first = nullptr;
+        q->rear = nullptr;
+        return x;
+    }
 
-    // if (IsEmpty(q)) q->first = q->rear = 0;
+    struct Node<T>* r = q->first;
+    q->first = q->first->next;
+    r->next = nullptr;
+    x = r->data;
+    delete r;
 
     return x;
 }
 
-void Display(struct Queue* q)
+template <typename T>
+void Display(struct Queue<T>* q)
 {
-    int i = q->first + 1;
-    while (i != (q->rear + 1)%q->size)
+    struct Node<T>* curr = q->first;
+    while (curr)
     {
-        printf("%d ", q->Q[i]);
-        (i == q->size - 1) ? i = 0 : i++;
+        printf("%d ", curr->data);
+        curr = curr->next;
     }
 }
 
-
 int main()
 {
-    struct Queue* q;
+    struct Queue<int>* q;
 
-    q = Create(q, 5);
-    printf("New item added to queue: %d", Enqueue(q, 9));
-    // printf("\nItem removed from front of queue: %d", Dequeue(q));
-    printf("\nNew item added to queue: %d", Enqueue(q, 8));
-    // printf("\nItem removed from front of queue: %d", Dequeue(q));
-    printf("\nNew item added to queue: %d", Enqueue(q, 7));
-    printf("\nNew item added to queue: %d", Enqueue(q, 6));
+    q = Create<int>(q);
+
+
+    printf("\nAdded new item to queue: %d", Enqueue(q, 1));
+    printf("\nAdded new item to queue: %d", Enqueue(q, 2));
+    printf("\nAdded new item to queue: %d", Enqueue(q, 3));
+    printf("\nRemove item from front of queue: %d", Dequeue(q));
+    // printf("\nRemove item from front of queue: %d", Dequeue(q));
+    // printf("\nRemove item from front of queue: %d", Dequeue(q));
+    // printf("\nRemove item from front of queue: %d", Dequeue(q));
     printf("\nDisplay: ");
     Display(q);
 
-    printf("\nItem removed from front of queue: %d", Dequeue(q));
-    printf("\nItem removed from front of queue: %d", Dequeue(q));
-    printf("\nDisplay: ");
-    Display(q);
-
-    printf("\nNew item added to queue: %d", Enqueue(q, 1));
-    printf("\nNew item added to queue: %d", Enqueue(q, 2));
-    printf("\nDisplay: ");
-    Display(q);
-
-
-    delete q;
 
     return 0;
 }
