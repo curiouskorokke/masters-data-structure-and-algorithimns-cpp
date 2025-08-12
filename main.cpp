@@ -36,7 +36,7 @@ struct Queue* Create(struct Queue* q, int size)
 {
     q = (struct Queue*)malloc(sizeof(struct Queue));
     q->size = size;
-    q->first = q->rear = -1;
+    q->first = q->rear = 0;
     q->Q = (int*)malloc(size * sizeof(int));
 
     return q;
@@ -44,12 +44,12 @@ struct Queue* Create(struct Queue* q, int size)
 
 bool IsEmpty(struct Queue* q)
 {
-    return q->first == q->rear;
+    return q->rear == q->first;
 }
 
 bool IsFull(struct Queue* q)
 {
-    return q->rear == q->size - 1;
+    return (q->rear + 1) % q->size == q->first;
 }
 
 int Enqueue(struct Queue* q, int value)
@@ -60,7 +60,10 @@ int Enqueue(struct Queue* q, int value)
         return -1;
     }
 
-    q->Q[++q->rear] = value;
+    q->rear = (q->rear + 1) % q->size;
+    q->Q[q->rear] = value;
+
+    // if (IsFull(q) && q->first != 0) q->rear = 0;
     return value;
 }
 
@@ -71,11 +74,13 @@ int Dequeue(struct Queue* q)
     if (IsEmpty(q))
     {
         printf("\nMan, queue is empty. Add some spice in it first.");
+        return x;
     }
-    else
-    {
-        x = q->Q[++q->first];
-    }
+
+    q->first = (q->first + 1) % q->size;
+    x = q->Q[q->first];
+
+    // if (IsEmpty(q)) q->first = q->rear = 0;
 
     return x;
 }
@@ -83,10 +88,10 @@ int Dequeue(struct Queue* q)
 void Display(struct Queue* q)
 {
     int i = q->first + 1;
-    while (i <= q->rear)
+    while (i != (q->rear + 1)%q->size)
     {
         printf("%d ", q->Q[i]);
-        i++;
+        (i == q->size - 1) ? i = 0 : i++;
     }
 }
 
@@ -95,14 +100,26 @@ int main()
 {
     struct Queue* q;
 
-    q = Create(q, 3);
+    q = Create(q, 5);
     printf("New item added to queue: %d", Enqueue(q, 9));
+    // printf("\nItem removed from front of queue: %d", Dequeue(q));
     printf("\nNew item added to queue: %d", Enqueue(q, 8));
-    // printf("\nNew item added to queue: %d", Enqueue(q, 7));
+    // printf("\nItem removed from front of queue: %d", Dequeue(q));
+    printf("\nNew item added to queue: %d", Enqueue(q, 7));
+    printf("\nNew item added to queue: %d", Enqueue(q, 6));
     printf("\nDisplay: ");
     Display(q);
-    // printf("\nItem removed from front of queue: %d", Dequeue(q));
-    // printf("\nItem removed from front of queue: %d", Dequeue(q));
+
+    printf("\nItem removed from front of queue: %d", Dequeue(q));
+    printf("\nItem removed from front of queue: %d", Dequeue(q));
+    printf("\nDisplay: ");
+    Display(q);
+
+    printf("\nNew item added to queue: %d", Enqueue(q, 1));
+    printf("\nNew item added to queue: %d", Enqueue(q, 2));
+    printf("\nDisplay: ");
+    Display(q);
+
 
     delete q;
 
