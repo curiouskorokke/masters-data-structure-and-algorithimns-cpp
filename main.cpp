@@ -2,126 +2,91 @@
 
 using namespace std;
 
-/*
- * Queue (FIFO - First In, First Out)
- * Insertion on back and removal at front
- */
-
-/*
- * ADT
- * Data - size, first, rear, array
- * Method - enqueue, dequeue, DIsplay, isEmpty, isFull
- *
- * What the the drawbacks for implementing Queue using array
- * 1. Unable to re-fill spaces of deleted elements because elements are not shift to the left once deleted from front.
- * 2. Because of point 1 , each space is only usable once.
- * 3. When front == rear, queue is full but technically, it's not.
- *    |  |  |  |  |  |
- *                f,R
- * Solution:
- * 1. Resetting Pointers
- * 2. Using circular queue (Downside, number of elements it can store is size - 1. Because q->first have to be empty)
- *
- */
-
-template <typename T>
-class Node
-{
-public:
-    T data;
-    Node* next;
-};
-
+// Double Queue Queue - DEQueue using array
 template <typename T>
 class Queue
 {
 private:
-    Node<T>* first;
-    Node<T>* rear;
+    int size;
+    int first;
+    int last;
+    int* Q;
 
 public:
-    Queue();
+    explicit Queue(int length = 5);
     ~Queue();
     bool IsEmpty();
-    T Enqueue(T value);
-    T Dequeue();
+    bool IsFull(bool fromRear = 0);
+    T Enqueue(T value, bool fromRear = 0);
+    T Dequeue(bool fromRear = 0);
     void Display();
 };
 
 template <typename T>
-Queue<T>::Queue()
+Queue<T>::Queue(int length)
 {
-    first = nullptr;
-    rear = nullptr;
+    size = length;
+    first = -1;
+    last = -1;
+    Q = new int[size];
 }
 
 template <typename T>
 Queue<T>::~Queue()
 {
-    while (first != rear + 1)
-    {
-        Node<T>* curr = first;
-        first = first->next;
-        delete curr;
-    }
+    delete[] Q;
 }
 
 template <typename T>
 bool Queue<T>::IsEmpty()
 {
-    return !(first && rear);
+    return first == last;
 }
 
 template <typename T>
-T Queue<T>::Enqueue(T value)
+bool Queue<T>::IsFull(bool fromRear)
 {
-    Node<T>* p = new Node<T>();
-
-    if (!p)
-    {
-        cout << "Insufficient memory! Upgrade your tiny-puny RAM please :(";
-        return -1;
-    }
-
-    p->data = value;
-    p->next = nullptr;
-
-    if (IsEmpty())
-    {
-        first = rear = p;
-    }
-    else
-    {
-        rear->next = p;
-        rear = p;
-    }
-
-    return p->data;
+    return fromRear ? last == size - 1 : first <= 0;
 }
 
 template <typename T>
-T Queue<T>::Dequeue()
+T Queue<T>::Enqueue(T value, bool fromRear)
+{
+    T x = -1;
+
+    if (IsFull(fromRear))
+    {
+        string isRearStr = fromRear ? "rear." : "front.";
+        cout << "Oi! Try to fill up from other end mate! It's full on the " << isRearStr << endl;
+        return x;
+    }
+
+    fromRear ? Q[++last] = value : Q[first--] = value;
+
+    x = value;
+
+    return x;
+}
+
+template <typename T>
+T Queue<T>::Dequeue(bool fromRear)
 {
     T x = -1;
 
     if (IsEmpty())
     {
+        cout << "Oi! Shit is already empty mate. Get your shit together." << endl;
         return x;
     }
 
-    if (first == rear)
+    if (fromRear)
     {
-        x = rear->data;
-        first = nullptr;
-        rear = nullptr;
-        return x;
+        x = Q[last--];
     }
-
-    Node<T>* r = first;
-    first = first->next;
-    r->next = nullptr;
-    x = r->data;
-    delete r;
+    else
+    {
+        x = Q[++first];
+    }
 
     return x;
 }
@@ -129,40 +94,42 @@ T Queue<T>::Dequeue()
 template <typename T>
 void Queue<T>::Display()
 {
-    Node<T>* curr = first;
-    while (curr)
+    if (IsEmpty())
     {
-        cout << curr->data << " ";
-        curr = curr->next;
+        cout<<"Uhm bro. It's empty. What are you yapping for me to show?"<<endl;
+        return;
     }
-    cout << endl;
+
+    cout<<"Display: ";
+    for (int i = first == -1 ? 0 : first + 1; i <= last; i++)
+    {
+        cout << Q[i] << " ";
+    }
 }
 
-// template <typename T>
-// void Display(struct Queue<T>* q)
-// {
-//     struct Node<T>* curr = q->first;
-//     while (curr)
-//     {
-//         printf("%d ", curr->data);
-//         curr = curr->next;
-//     }
-// }
 
 int main()
 {
     Queue<int>* q = new Queue<int>();
 
-    cout << endl;
-    cout << "Added new item to queue: " << q->Enqueue(1) << endl;
-    cout << "Added new item to queue: " << q->Enqueue(2) << endl;
-    cout << "Added new item to queue: " << q->Enqueue(3) << endl;
-    cout << "Remove item from front of queue: " << q->Dequeue() << endl;
-    cout << "Display: ";
+    cout << "Added new item to queue: " << q->Enqueue(1, true) << endl;
+    cout << "Added new item to queue: " << q->Enqueue(2, true) << endl;
+    cout << "Added new item to queue: " << q->Enqueue(3, true) << endl;
+    cout << "Added new item to queue: " << q->Enqueue(4, true) << endl;
+    cout << "Added new item to queue: " << q->Enqueue(5, true) << endl;
     q->Display();
+    cout<<endl;
+
+    cout << "Remove item from front of queue: " << q->Dequeue() << endl;
+    cout << "Remove item from front of queue: " << q->Dequeue() << endl;
+    cout << "Remove item from front of queue: " << q->Dequeue(true) << endl;
+    cout << "Remove item from front of queue: " << q->Dequeue(true) << endl;
+    cout << "Remove item from front of queue: " << q->Dequeue(true) << endl;
+    q->Display();
+    cout<<endl;
+
 
     delete q;
-
 
     return 0;
 }
