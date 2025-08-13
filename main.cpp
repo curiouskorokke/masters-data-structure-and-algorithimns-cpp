@@ -25,75 +25,100 @@ using namespace std;
  */
 
 template <typename T>
-struct Node
+class Node
 {
+public:
     T data;
     Node* next;
 };
 
 template <typename T>
-struct Queue
+class Queue
 {
+private:
     Node<T>* first;
     Node<T>* rear;
+
+public:
+    Queue();
+    ~Queue();
+    bool IsEmpty();
+    T Enqueue(T value);
+    T Dequeue();
+    void Display();
 };
 
 template <typename T>
-struct Queue<T>* Create(struct Queue<T>* q)
+Queue<T>::Queue()
 {
-    q = (struct Queue<T>*)malloc(sizeof(struct Queue<T>));
-    q->first = nullptr;
-    q->rear = nullptr;
-
-    return q;
+    first = nullptr;
+    rear = nullptr;
 }
 
 template <typename T>
-bool IsEmpty(struct Queue<T>* q)
+Queue<T>::~Queue()
 {
-    return !(q->first && q->rear);
+    while (first != rear + 1)
+    {
+        Node<T>* curr = first;
+        first = first->next;
+        delete curr;
+    }
 }
 
 template <typename T>
-T Enqueue(struct Queue<T>* q, T value)
+bool Queue<T>::IsEmpty()
 {
-    struct Node<T>* p = (struct Node<T>*)malloc(sizeof(struct Node<T>));
+    return !(first && rear);
+}
+
+template <typename T>
+T Queue<T>::Enqueue(T value)
+{
+    Node<T>* p = new Node<T>();
+
+    if (!p)
+    {
+        cout << "Insufficient memory! Upgrade your tiny-puny RAM please :(";
+        return -1;
+    }
+
     p->data = value;
     p->next = nullptr;
 
-    if (IsEmpty(q))
+    if (IsEmpty())
     {
-        q->first = q->rear = p;
+        first = rear = p;
     }
     else
     {
-        q->rear->next = p;
-        q->rear = p;
+        rear->next = p;
+        rear = p;
     }
 
     return p->data;
 }
 
 template <typename T>
-T Dequeue(struct Queue<T>* q)
+T Queue<T>::Dequeue()
 {
     T x = -1;
 
-    if (IsEmpty(q))
+    if (IsEmpty())
     {
         return x;
     }
 
-    if (q->first == q->rear)
+    if (first == rear)
     {
-        x = q->rear->data;
-        q->first = nullptr;
-        q->rear = nullptr;
+        x = rear->data;
+        first = nullptr;
+        rear = nullptr;
         return x;
     }
 
-    struct Node<T>* r = q->first;
-    q->first = q->first->next;
+    Node<T>* r = first;
+    first = first->next;
     r->next = nullptr;
     x = r->data;
     delete r;
@@ -102,32 +127,41 @@ T Dequeue(struct Queue<T>* q)
 }
 
 template <typename T>
-void Display(struct Queue<T>* q)
+void Queue<T>::Display()
 {
-    struct Node<T>* curr = q->first;
+    Node<T>* curr = first;
     while (curr)
     {
-        printf("%d ", curr->data);
+        cout << curr->data << " ";
         curr = curr->next;
     }
+    cout << endl;
 }
+
+// template <typename T>
+// void Display(struct Queue<T>* q)
+// {
+//     struct Node<T>* curr = q->first;
+//     while (curr)
+//     {
+//         printf("%d ", curr->data);
+//         curr = curr->next;
+//     }
+// }
 
 int main()
 {
-    struct Queue<int>* q;
+    Queue<int>* q = new Queue<int>();
 
-    q = Create<int>(q);
+    cout << endl;
+    cout << "Added new item to queue: " << q->Enqueue(1) << endl;
+    cout << "Added new item to queue: " << q->Enqueue(2) << endl;
+    cout << "Added new item to queue: " << q->Enqueue(3) << endl;
+    cout << "Remove item from front of queue: " << q->Dequeue() << endl;
+    cout << "Display: ";
+    q->Display();
 
-
-    printf("\nAdded new item to queue: %d", Enqueue(q, 1));
-    printf("\nAdded new item to queue: %d", Enqueue(q, 2));
-    printf("\nAdded new item to queue: %d", Enqueue(q, 3));
-    printf("\nRemove item from front of queue: %d", Dequeue(q));
-    // printf("\nRemove item from front of queue: %d", Dequeue(q));
-    // printf("\nRemove item from front of queue: %d", Dequeue(q));
-    // printf("\nRemove item from front of queue: %d", Dequeue(q));
-    printf("\nDisplay: ");
-    Display(q);
+    delete q;
 
 
     return 0;
