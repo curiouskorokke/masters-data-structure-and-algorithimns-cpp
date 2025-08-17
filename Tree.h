@@ -28,6 +28,7 @@ public:
     void Preorder(Tree* t, Stack<Tree*>* st);
     void Inorder(Tree* t, Stack<Tree*>* st);
     void Postorder(Tree* t, Stack<Tree*>* st);
+    void LevelOrder(Tree* t, Queue<Tree*>* st);
 };
 
 template <typename T>
@@ -167,6 +168,35 @@ void Tree<T>::Postorder(Tree* t, Stack<Tree*>* st)
 
 
         st->Pop();
+    }
+}
+
+template <typename T>
+void Tree<T>::LevelOrder(Tree* t, Queue<Tree*>* q)
+{
+    if (t || !q->IsEmpty())
+    {
+        cout << t->data << " ";
+
+        if (t->lChild)
+        {
+            Node<Tree*>* nl = new Node<Tree*>;
+            nl->data = t->lChild;
+            q->Enqueue(nl);
+        }
+
+        if (t->rChild)
+        {
+            Node<Tree*>* nr = new Node<Tree*>;
+            nr->data = t->rChild;
+            q->Enqueue(nr);
+        }
+
+        if (!q->IsEmpty())
+        {
+            LevelOrder(q->Dequeue()->data, q);
+        }
+
     }
 }
 

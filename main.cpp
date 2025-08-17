@@ -21,6 +21,12 @@ int main()
     t->Postorder(t, st);
     cout << endl;
 
+    Queue<Tree<int>*>* q = new Queue<Tree<int>*>;
+
+    cout <<"Level Order: ";
+    t->LevelOrder(t,q);
+    cout<<endl;
+
 
     delete t;
     delete st;
