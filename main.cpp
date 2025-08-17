@@ -1,5 +1,6 @@
 #include<iostream>
 #include "Tree.h"
+
 using namespace std;
 
 int main()
@@ -7,17 +8,22 @@ int main()
     Tree<int>* t = new Tree<int>;
     t->Create(t);
 
-    cout<<"Preorder: ";
-    t->Preorder(t);
-    cout<<endl;
-    cout<<"Inorder: ";
-    t->Inorder(t);
-    cout<<endl;
-    cout<<"Postorder: ";
-    t->Postorder(t);
-    cout<<endl;
+    Stack<Tree<int>*>* st = new Stack<Tree<int>*>;
+    cout << "Preorder: ";
+    t->Preorder(t, st);
+    cout << endl;
+
+    cout << "Inorder: ";
+    t->Inorder(t, st);
+    cout << endl;
+
+    cout << "Postorder: ";
+    t->Postorder(t, st);
+    cout << endl;
+
 
     delete t;
+    delete st;
 
     return 0;
 }

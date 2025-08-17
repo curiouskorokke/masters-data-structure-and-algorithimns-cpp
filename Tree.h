@@ -8,6 +8,8 @@
 
 #include<iostream>
 #include "Queue.h"
+#include "Stack.h"
+
 using namespace std;
 
 template <typename T>
@@ -23,9 +25,9 @@ public:
     Tree();
     ~Tree();
     void Create(Tree* root);
-    void Preorder(Tree* t);
-    void Inorder(Tree* t);
-    void Postorder(Tree* t);
+    void Preorder(Tree* t, Stack<Tree*>* st);
+    void Inorder(Tree* t, Stack<Tree*>* st);
+    void Postorder(Tree* t, Stack<Tree*>* st);
 };
 
 template <typename T>
@@ -64,8 +66,8 @@ void Tree<T>::Create(Tree* root)
         Tree* fq = fn->data;
 
         int leftChildValue;
-        cout<<"Insert left child value: ";
-        cin>>leftChildValue;
+        cout << "Insert left child value: ";
+        cin >> leftChildValue;
 
         if (leftChildValue != -1)
         {
@@ -78,8 +80,8 @@ void Tree<T>::Create(Tree* root)
         }
 
         int rightChildValue;
-        cout<<"Insert right child value: ";
-        cin>>rightChildValue;
+        cout << "Insert right child value: ";
+        cin >> rightChildValue;
 
         if (rightChildValue != -1)
         {
@@ -96,37 +98,76 @@ void Tree<T>::Create(Tree* root)
 }
 
 template <typename T>
-void Tree<T>::Preorder(Tree* t) {
-
-    if (t)
+void Tree<T>::Preorder(Tree* t, Stack<Tree*>* st)
+{
+    if (t || !st->IsEmpty())
     {
-        cout<<t->data<<" ";
-        Preorder(t->lChild);
-        Preorder(t->rChild);
+        cout << t->data << " ";
+        DoublyNode<Tree*>* n = new DoublyNode<Tree*>;
+        n->data = t;
+        st->Push(n);
+
+        if (t->lChild)
+        {
+            Preorder(t->lChild, st);
+        }
+
+        if (t->rChild)
+        {
+            Preorder(t->rChild, st);
+        }
+
+        st->Pop();
     }
 }
 
 template <typename T>
-void Tree<T>::Inorder(Tree* t) {
-
-    if (t)
+void Tree<T>::Inorder(Tree* t, Stack<Tree*>* st)
+{
+    if (t || !st->IsEmpty())
     {
-        Inorder(t->lChild);
-        cout<<t->data<<" ";
-        Inorder(t->rChild);
+        if (t->lChild)
+        {
+            Inorder(t->lChild, st);
+        }
+
+        cout << t->data << " ";
+        DoublyNode<Tree*>* n = new DoublyNode<Tree*>;
+        n->data = t;
+        st->Push(n);
+
+        if (t->rChild)
+        {
+            Inorder(t->rChild, st);
+        }
+
+        st->Pop();
     }
 }
 
 template <typename T>
-void Tree<T>::Postorder(Tree* t) {
-
-    if (t)
+void Tree<T>::Postorder(Tree* t, Stack<Tree*>* st)
+{
+    if (t || !st->IsEmpty())
     {
-        Postorder(t->lChild);
-        Postorder(t->rChild);
-        cout<<t->data<<" ";
+        if (t->rChild)
+        {
+            Postorder(t->rChild, st);
+        }
+
+        if (t->lChild)
+        {
+            Postorder(t->lChild, st);
+        }
+
+        cout << t->data << " ";
+        DoublyNode<Tree*>* n = new DoublyNode<Tree*>;
+        n->data = t;
+        st->Push(n);
+
+
+        st->Pop();
     }
 }
-
 
 #endif //TREE_H
