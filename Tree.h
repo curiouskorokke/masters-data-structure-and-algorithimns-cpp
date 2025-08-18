@@ -29,6 +29,8 @@ public:
     void Inorder(Tree* t, Stack<Tree*>* st);
     void Postorder(Tree* t, Stack<Tree*>* st);
     void LevelOrder(Tree* t, Queue<Tree*>* st);
+    int Height(Tree* t);
+    int Node(Tree* t);
 };
 
 template <typename T>
@@ -198,6 +200,18 @@ void Tree<T>::LevelOrder(Tree* t, Queue<Tree*>* q)
         }
 
     }
+}
+
+template <typename T>
+int Tree<T>::Height(Tree* t)
+{
+    return 0;
+}
+
+template <typename T>
+int Tree<T>::Node(Tree* t)
+{
+    
 }
 
 #endif //TREE_H
