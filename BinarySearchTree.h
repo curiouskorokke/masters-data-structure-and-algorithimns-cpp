@@ -12,7 +12,7 @@ class BinarySearchTree
 {
 public:
     Node<T>* Insert(Node<T>* n, T val);
-    void Search(T val);
+    void Search(Node<T>* n, T val);
 };
 
 
@@ -40,6 +40,30 @@ Node<T>* BinarySearchTree<T>::Insert(Node<T>* n, T val)
 
 
     return n;
+}
+
+template <typename T>
+void BinarySearchTree<T>::Search(Node<T>* n, T val)
+{
+    if (!n)
+    {
+        cout<<"Awww! "<<val<<" not found! :("<<endl;
+        return;
+    }
+
+    if (val == n->data )
+    {
+        cout<<"Awwww yisssss! "<<val<<" found!"<<endl;
+        return;
+    }
+
+    if (val < n->data)
+    {
+        Search(n->lChild, val);
+    } else
+    {
+        Search(n->rChild, val);
+    }
 }
 
 #endif //BINARYSEARCHTREE_H

@@ -14,6 +14,9 @@ int main()
     n = bst->Insert(n, 5);
     n = bst->Insert(n, 30);
     n = bst->Insert(n, 8);
+    bst->Search(n, 30);
+    bst->Search(n, 8);
+    bst->Search(n, 99);
 
     return 0;
 }
