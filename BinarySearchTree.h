@@ -16,6 +16,7 @@ private:
 public:
     BinarySearchTree();
     void Insert(T val);
+    void Search(T val);
     ~BinarySearchTree();
 };
 
@@ -69,6 +70,32 @@ void BinarySearchTree<T>::Insert(T val)
     {
         r->rChild = n;
     }
+}
+
+template <typename T>
+void BinarySearchTree<T>::Search(T val)
+{
+    auto t = root;
+
+    while (t)
+    {
+        if (val == t->data)
+        {
+            cout << "Found "<<val<<" bruv! Proud of ya!"<<endl;
+            return;
+        }
+
+        if (val < t->data)
+        {
+            t = t->lChild;
+        }
+        else
+        {
+            t = t->rChild;
+        }
+    }
+
+    cout << "Aw! I can't seem to find value "<<val<<" :("<<endl;
 }
 
 template <typename T>

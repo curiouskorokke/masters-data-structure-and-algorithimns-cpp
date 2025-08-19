@@ -14,5 +14,9 @@ int main()
     bst->Insert(30);
     bst->Insert(8);
     bst->Insert(2);
+    bst->Search(2);
+    bst->Search(8);
+    bst->Search(30);
+    bst->Search(99999);
     return 0;
 }
