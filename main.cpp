@@ -6,17 +6,14 @@ using namespace std;
 
 int main()
 {
+    Node<int>* n = nullptr;
     auto bst = new BinarySearchTree<int>;
 
-    bst->Insert(10);
-    bst->Insert(5);
-    bst->Insert(20);
-    bst->Insert(30);
-    bst->Insert(8);
-    bst->Insert(2);
-    bst->Search(2);
-    bst->Search(8);
-    bst->Search(30);
-    bst->Search(99999);
+    n = bst->Insert(n, 10);
+    n = bst->Insert(n, 20);
+    n = bst->Insert(n, 5);
+    n = bst->Insert(n, 30);
+    n = bst->Insert(n, 8);
+
     return 0;
 }

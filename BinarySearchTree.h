@@ -10,98 +10,36 @@
 template <typename T>
 class BinarySearchTree
 {
-private:
-    Node<T>* root;
-
 public:
-    BinarySearchTree();
-    void Insert(T val);
+    Node<T>* Insert(Node<T>* n, T val);
     void Search(T val);
-    ~BinarySearchTree();
 };
 
-template <typename T>
-BinarySearchTree<T>::BinarySearchTree()
-{
-    root = nullptr;
-}
 
 template <typename T>
-// Iterative Approach
-void BinarySearchTree<T>::Insert(T val)
+// Recursive Approach
+Node<T>* BinarySearchTree<T>::Insert(Node<T>* n, T val)
 {
-    if (!root)
+    if (!n)
     {
-        auto r = new Node<T>;
-        r->data = val;
-        root = r;
-        return;
-    }
-
-    auto t = root;
-    Node<T>* r;
-
-    while (t)
-    {
-        r = t;
-        if (val == t->data)
-        {
-            cout << "Value already exist!" << endl;
-            return;
-        }
-
-        if (val < t->data)
-        {
-            t = t->lChild;
-        }
-        else
-        {
-            t = t->rChild;
-        }
-    }
-
-    auto n = new Node<T>;
-    n->data = val;
-    if (val < r->data)
-    {
-        r->lChild = n;
+        auto t = new Node<T>;
+        t->data = val;
+        n = t;
     }
     else
     {
-        r->rChild = n;
-    }
-}
-
-template <typename T>
-void BinarySearchTree<T>::Search(T val)
-{
-    auto t = root;
-
-    while (t)
-    {
-        if (val == t->data)
+        if (val < n->data)
         {
-            cout << "Found "<<val<<" bruv! Proud of ya!"<<endl;
-            return;
-        }
-
-        if (val < t->data)
-        {
-            t = t->lChild;
+            n->lChild = Insert(n->lChild, val);
         }
         else
         {
-            t = t->rChild;
+            n->rChild = Insert(n->rChild, val);
         }
     }
 
-    cout << "Aw! I can't seem to find value "<<val<<" :("<<endl;
-}
 
-template <typename T>
-BinarySearchTree<T>::~BinarySearchTree()
-{
-    delete root;
+    return n;
 }
 
 #endif //BINARYSEARCHTREE_H
