@@ -5,25 +5,25 @@
 #ifndef NODE_H
 #define NODE_H
 template <typename T>
-class Node
+class TreeNode
 {
 public:
     T data;
-    Node* lChild;
-    Node* rChild;
-    Node();
-    ~Node();
+    TreeNode* lChild;
+    TreeNode* rChild;
+    TreeNode();
+    ~TreeNode();
 };
 
 template <typename T>
-Node<T>::Node()
+TreeNode<T>::TreeNode()
 {
     lChild = nullptr;
     rChild = nullptr;
 }
 
 template <typename T>
-Node<T>::~Node()
+TreeNode<T>::~TreeNode()
 {
     delete lChild;
     delete rChild;

@@ -5,22 +5,24 @@
 #ifndef BINARYSEARCHTREE_H
 #define BINARYSEARCHTREE_H
 
-#include "Node.h"
+#include "TreeNode.h"
+#include "Stack.h"
 
 template <typename T>
 class BinarySearchTree
 {
 public:
-    int Height(Node<T>* n);
-    Node<T>* InPre(Node<T>* n);
-    Node<T>* InSuc(Node<T>* n);
-    Node<T>* Insert(Node<T>* n, T val);
-    void Search(Node<T>* n, T val);
-    Node<T>* Delete(Node<T>* n, T val);
+    int Height(TreeNode<T>* n);
+    TreeNode<T>* InPre(TreeNode<T>* n);
+    TreeNode<T>* InSuc(TreeNode<T>* n);
+    TreeNode<T>* Insert(TreeNode<T>* n, T val);
+    void Search(TreeNode<T>* n, T val);
+    TreeNode<T>* Delete(TreeNode<T>* n, T val);
+    TreeNode<T>* GenerateFromPreorder(TreeNode<T>* n, int* arr, int length);
 };
 
 template <typename T>
-int BinarySearchTree<T>::Height(Node<T>* n)
+int BinarySearchTree<T>::Height(TreeNode<T>* n)
 {
     int x, y;
     if (!n)
@@ -35,7 +37,7 @@ int BinarySearchTree<T>::Height(Node<T>* n)
 }
 
 template <typename T>
-Node<T>* BinarySearchTree<T>::InPre(Node<T>* n)
+TreeNode<T>* BinarySearchTree<T>::InPre(TreeNode<T>* n)
 {
     while (n && n->rChild)
     {
@@ -46,7 +48,7 @@ Node<T>* BinarySearchTree<T>::InPre(Node<T>* n)
 }
 
 template <typename T>
-Node<T>* BinarySearchTree<T>::InSuc(Node<T>* n)
+TreeNode<T>* BinarySearchTree<T>::InSuc(TreeNode<T>* n)
 {
     while (n && n->lChild)
     {
@@ -59,11 +61,11 @@ Node<T>* BinarySearchTree<T>::InSuc(Node<T>* n)
 
 template <typename T>
 // Recursive Approach
-Node<T>* BinarySearchTree<T>::Insert(Node<T>* n, T val)
+TreeNode<T>* BinarySearchTree<T>::Insert(TreeNode<T>* n, T val)
 {
     if (!n)
     {
-        auto t = new Node<T>;
+        auto t = new TreeNode<T>;
         t->data = val;
         n = t;
     }
@@ -83,7 +85,7 @@ Node<T>* BinarySearchTree<T>::Insert(Node<T>* n, T val)
 }
 
 template <typename T>
-void BinarySearchTree<T>::Search(Node<T>* n, T val)
+void BinarySearchTree<T>::Search(TreeNode<T>* n, T val)
 {
     if (!n)
     {
@@ -109,32 +111,33 @@ void BinarySearchTree<T>::Search(Node<T>* n, T val)
 
 /*
  * There are three scenario to cater for in deletion
- * 1. Leaf node deletion
- * 2. Node deletion with child node
- * 3. Root node deletion
+ * 1. Leaf TreeNode deletion
+ * 2. TreeNode deletion with child TreeNode
+ * 3. Root TreeNode deletion
  *
  * For 2 and 3 , inorder predecessor / inrorder successor should replace the value :|
  */
 template <typename T>
-Node<T>* BinarySearchTree<T>::Delete(Node<T>* n, T val)
+TreeNode<T>* BinarySearchTree<T>::Delete(TreeNode<T>* n, T val)
 {
     if (val == n->data)
     {
-        // N is a leaf node
+        // N is a leaf TreeNode
         if (!n->lChild && !n->rChild)
         {
-            cout << val << " found and deleted! wooohooo!";
+            cout << val << " found and deleted! wooohooo!" << endl;
             return nullptr;
         }
 
-        // N is a root / parent node
-        Node<T>* q;
+        // N is a root / parent TreeNode
+        TreeNode<T>* q;
         if (Height(n->lChild) > Height(n->rChild))
         {
             q = InPre(n->lChild);
             n->data = q->data;
             n->lChild = Delete(n->lChild, q->data);
-        } else
+        }
+        else
         {
             q = InSuc(n->rChild);
             n->data = q->data;
@@ -154,6 +157,46 @@ Node<T>* BinarySearchTree<T>::Delete(Node<T>* n, T val)
     }
 
     return n;
+}
+
+template <typename T>
+TreeNode<T>* BinarySearchTree<T>::GenerateFromPreorder(TreeNode<T>* n, int* arr, int length)
+{
+    auto* st = new Stack<int>;
+    TreeNode<T>* root = n;
+    TreeNode<T>* prev = root;
+
+    for (int i = 0; i < length; i++)
+    {
+        auto t = new TreeNode<T>;
+        t->data = arr[i];
+
+        if (!prev)
+        {
+            prev = t;
+            root = t;
+            continue;
+        }
+
+        if (arr[i] < prev->data)
+        {
+            prev->lChild = t;
+            st->Push(prev);
+            prev = t;
+            continue;
+        }
+
+        while (arr[i] > prev->data && (st->top && arr[i] > st->top->data->data))
+        {
+            prev = st->Pop();
+        }
+
+        prev->rChild = t;
+        prev = t;
+
+    };
+
+    return root;
 }
 
 #endif //BINARYSEARCHTREE_H
