@@ -18,5 +18,8 @@ int main()
     bst->Search(n, 8);
     bst->Search(n, 99);
 
+    n = bst->Delete(n, 20);
+    n = bst->Delete(n, 5);
+
     return 0;
 }
